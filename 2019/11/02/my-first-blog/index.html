@@ -14,10 +14,10 @@
 <meta property="og:site_name" content="SHERPA-ZARIC">
 <meta property="og:description" content="首先是系统的环境问题。linux 安装 moviepy需要很多依赖，安装起来费神费力。配置起来也非常麻烦，最简单的办法是直接使用他人构建好的镜像文件。 再就是字体显示问题。镜像中的imagmagick不支持中文的字体。生成的视频中文乱码，搜索了好! 长时间，决定自己手动构建一个镜像。参考的文章链接： linux追加中文字库，解决imagemagick 中文乱码的问题 Linux(Ubuntu，Ce">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;1200357-20190919202017204-216254823.png">
-<meta property="og:updated_time" content="2019-11-02T09:31:53.592Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;1200357-20190919202017204-216254823.png">
+<meta property="og:updated_time" content="2019-11-02T09:39:08.987Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;1200357-20190919202017204-216254823.png">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;1200357-20190919202017204-216254823.png">
   
     <link rel="alternate" href="/atom.xml" title="SHERPA-ZARIC" type="application/atom+xml">
   
@@ -105,12 +105,12 @@
 <p>放一下Dockerfile</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">FROM dkarchmervue/moviepy:latest</span><br><span class="line"># 我在同级目录下创建了一个windows_fonts文件夹，里面放着从window下拷贝过来的文件。考本到镜像的字体文件夹下。</span><br><span class="line">COPY ./wondow_fonts/ /usr/share/fonts/windows/</span><br><span class="line"># 更改ubuntu镜像源，dkarchmervue/moviepy是基于ubuntu14.04，找一个镜像源，在本地创建一个sources.list的文件，拷贝到镜像中就可以。</span><br><span class="line">RUN cp /etc/apt/sources.list /etc/apt/sources.list.bak</span><br><span class="line">COPY sources.list /etc/apt/sources.list </span><br><span class="line">RUN apt-get update</span><br><span class="line"># 安装添加字体的依赖</span><br><span class="line">RUN apt-get install ttf-mscorefonts-installer -y &amp;&amp; apt-get install fontconfig -y\</span><br><span class="line">     &amp;&amp; apt-get install fontconfig \</span><br><span class="line">    &amp;&amp; cd /usr/share/fonts/windows/ &amp;&amp; chmod 777 * &amp;&amp; mkfontscale &amp;&amp; mkfontdir &amp;&amp; fc-cache</span><br><span class="line">WORKDIR /work/</span><br></pre></td></tr></table></figure>
 <p>这样就制作了一个基于<code>dkarchmervue/moviepy</code> 的带中文字体的镜像。<br>然后直接运行 <code>docker build -t moviepy_cnfonts .</code> 即可创建一个名为 moviepy_cnfonts的镜像。可以把这个镜像替代<code>dkarchmervue/moviepy:latest</code>这个镜像作为运行 python文件的基础镜像。</p>
-<p>运行moviepy官方的结尾特效 end_effect<br><img src="/1200357-20190919202017204-216254823.png" alt=""></p>
+<p>运行moviepy官方的结尾特效 end_effect<br><img src="/images/1200357-20190919202017204-216254823.png" alt=""></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/11/02/my-first-blog/" data-id="ck2hdayzi0001s4vi1nfv7wsh" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/11/02/my-first-blog/" data-id="ck2hdlei70001vkvi48okexgc" class="article-share-link">Share</a>
       
       
     </footer>
