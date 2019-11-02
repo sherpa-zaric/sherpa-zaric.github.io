@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <title>python-cache | SHERPA-ZARIC</title>
+  <meta name="description" content="在神秘的珠穆朗玛峰，有一个为世界各国登山队充当向导与挑夫的族群——夏尔巴人 （SHERPA）" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" type="text/css" href="/css/screen.css" />
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic|Open+Sans:700,400" />
+
+  <meta name="generator" content="SHERPA-ZARIC">
+
+  
+  
+  
+
+  
+</head>
+
+
+<body class="post-template">
+
+  <header class="site-head"  style="background-image: url(//blog.ghost.org/content/images/2013/Nov/cover.png)" >
+    <div class="vertical">
+        <div class="site-head-content inner">
+             <a class="blog-logo" href="/"><img src="//blog.ghost.org/content/images/2013/Nov/bloglogo_1-1.png" alt="Blog Logo"/></a> 
+            <h1 class="blog-title">SHERPA-ZARIC</h1>
+            <h2 class="blog-description">在神秘的珠穆朗玛峰，有一个为世界各国登山队充当向导与挑夫的族群——夏尔巴人 （SHERPA）</h2>
+        </div>
+    </div>
+</header>
+  
+
+<main class="content" role="main">
+  <article class="post">
+    <span class="post-meta">
+      <time datetime="2019-10-03T04:42:40.000Z" itemprop="datePublished">
+          2019-10-03
+      </time>
+    
+</span>
+    <h1 class="post-title">python-cache</h1>
+    <section class="post-content">
+      <h2 id="msgpack介绍"><a href="#msgpack介绍" class="headerlink" title="msgpack介绍"></a>msgpack介绍</h2><p>在阅读sanic相关项目的时候 <a href=""https://github.com/howie6879/Sanic-For-Pythoneer/blob/master/docs/part1/6.%E5%B8%B8%E7%94%A8%E7%9A%84%E6%8A%80%E5%B7%A7.md"">Sanic-For-Pythoneer</a> 阅读代码过程中发现几个比较好用的python库，</p>
+<h3 id="1-cached"><a href="#1-cached" class="headerlink" title="1. cached"></a>1. cached</h3><p>缓存其实应用场景还是比较多的。比如我现在应用的就是对 从database中获取到的数据做缓存，设置ttl(time to live)以减小数据库压力。</p>
+<p>cached的简单应用 （python = 3.7）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import aiocache</span><br><span class="line">from aiocache.serializers import NullSerializer, StringSerializer, \</span><br><span class="line">    PickleSerializer</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@aiocache.cached(ttl=10, serializer=PickleSerializer())</span><br><span class="line">async def get_res():</span><br><span class="line">    print(&quot;get_res(): int(11)&quot;)</span><br><span class="line">    return 11</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    import asyncio</span><br><span class="line"></span><br><span class="line">    loop = asyncio.get_event_loop()</span><br><span class="line">    data = asyncio.run(get_res())</span><br><span class="line">    print(type(data), data)</span><br><span class="line">    data = asyncio.run(get_res())</span><br><span class="line">    print(type(data), data)</span><br></pre></td></tr></table></figure>
+<p>aiocache实现并不复杂。介绍一下 SimpleMemoryCache。大致的思路就是 把数据保存到字典中，key默认为 model_name+ func_name + args + kwargs 组合（可以指定key的值），到了ttl设定的时间就把map中的键值pop出去。<br>其他的也是类似的思路。</p>
+<p>这里值得注意的是 <code>serializer</code>这个参数。如果是使用 <code>SimpleMemoryCache</code>作为缓存，默认是使用 <code>NullSerializer</code>作为序列化工具的，即set的任何内容都可以在get时原样获取，在本地内存中这一点问题没有。<br>如果需要对对象序列化 建议使用 <code>PickleSerializer</code><br><a href=""https://www.zhihu.com/question/38355589"">我是pickle</a></p>
+<p>但是如果使用redis作为缓存，会发生一些预测不到的错误。解决办法是使用：<code>JsonSerializer</code>,内部使用的是 <code>ujson</code>作为序列化工具。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">json module and ujson:</span><br><span class="line">        - ujson dumps supports bytes while json doesn&apos;t</span><br><span class="line">        - ujson and json outputs may differ sometimes</span><br></pre></td></tr></table></figure>
+
+<p>还有一个 <code>MsgPackSerializer</code>,</p>
+<p><code>Transform data to bytes using msgpack.dumps and msgpack.loads to retrieve it back.</code></p>
+<p>还有一个序列化参数，用的比较少，<code>StringSerializer</code>,比如你缓存的是 1，在下次获取缓存结果的时候会给你返回 <code>&#39;1&#39;</code>。</p>
+<h3 id="2-msgpack"><a href="#2-msgpack" class="headerlink" title="2. msgpack"></a>2. msgpack</h3><p>msgpack 是cached包安装时候的依赖。进入源码，发现其对外提供的API非常简单，用法与 ujson,json 等序列/反序列工具基本一直。</p>
+<p>其源码中对外暴露方法做了常规化处理，这样我们用起来很快适应</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># alias for compatibility to simplejson/marshal/pickle.</span><br><span class="line">load = unpack</span><br><span class="line">loads = unpackb</span><br><span class="line"></span><br><span class="line">dump = pack</span><br><span class="line">dumps = packb</span><br></pre></td></tr></table></figure>
+
+<p>msgpack的优势是：msgpack用起来像json，但是却比json快，并且序列化以后的数据长度更小，言外之意，使用msgpack不仅序列化和反序列化的速度快，数据传输量也比json格式小，msgpack同样支持多种语言。</p>
+<p>我们平时主要会用到 <code>loads</code> 等同于 <code>unpackb</code> , <code>dumps</code> 等同于 <code>packb</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;import msgpack</span><br><span class="line">&gt;&gt;&gt;animal = &#123;&quot;color&quot;:&quot;pink&quot;,&quot;name&quot;:&quot;duck&quot;&#125;</span><br><span class="line">&gt;&gt;&gt;msgpack.dumps(animal) // 比 json.dumps(x)的长度更小</span><br><span class="line">b&apos;\x82\xa5color\xa4pink\xa4name\xa4duck&apos;</span><br><span class="line">&gt;&gt;&gt;msgpack.loads(msgpack.dumps(animal))</span><br><span class="line">&#123;b&apos;color&apos;: b&apos;pink&apos;, b&apos;name&apos;: b&apos;duck&apos;&#125;</span><br><span class="line">&gt;&gt;&gt;msgpack.loads(msgpack.dumps(animal),encoding=&quot;utf-8&quot;) // 转会初始状态的字符串，需要加上 encoding这个参数，内部会调用decode()方法</span><br><span class="line">&#123;&apos;color&apos;: &apos;pink&apos;, &apos;name&apos;: &apos;duck&apos;&#125;</span><br></pre></td></tr></table></figure>
+<p>另外 load 和 dump的用法和json.load &amp; json.dump用法相同。<br>该包源码非常简单，有兴趣的可以去看看源码</p>
+
+    </section>
+    <footer class="post-footer">
+      <section class="author">
+    <h4>ZARIC</h4>
+    <p>A designer, developer and entrepreneur. Spends his time travelling the world with a bag of kites. Likes journalism and publishing platforms.</p>
+</section>
+      <section class="share">
+    <h4>Share this post</h4>
+    <a class="icon-twitter" href="http://twitter.com/share?url=http://yoursite.com/2019/10/03/python-cache/"
+       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/10/03/python-cache/"
+       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="icon-google-plus" href="https://plus.google.com/share?url=http://yoursite.com/2019/10/03/python-cache/"
+       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+</section>
+    </footer>
+  </article>
+  <nav class="pagination" role="pagination">
+    
+    <a class="newer-posts" href="/2019/11/02/my-first-blog/">
+        ← moviepy 中文镜像
+    </a>
+    
+    <span class="page-number">•</span>
+    
+</nav>
+  <div id="comment" class="comments-area">
+    <h1 class="title"><a href="#disqus_comments" name="disqus_comments">Comments</a></h1>
+
+    
+</div>
+</main>
+
+
+  
+<footer class="site-footer">
+  
+  <div class="inner">
+     <section class="copyright">All content copyright <a href="/">SHERPA-ZARIC</a> &copy; 2014 &bull; All rights reserved.</section>
+     <section class="poweredby">Proudly published with <a class="icon-ghost" href="http://zespia.tw/hexo/" target="_blank" rel="noopener">Hexo</a></section>
+  </div>
+</footer>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+
+
+
+
+
+
+</body>
+</html>
