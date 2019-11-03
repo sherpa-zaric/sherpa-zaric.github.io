@@ -419,6 +419,83 @@
 
 
   
+    <article id="post-flask应用上下文&amp;请求上下文" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/23/flask%E5%BA%94%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87&%E8%AF%B7%E6%B1%82%E4%B8%8A%E4%B8%8B%E6%96%87/">flask应用上下文和请求上下文</a>
+    </h1>
+  
+
+        
+        <a href="/2019/09/23/flask%E5%BA%94%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87&%E8%AF%B7%E6%B1%82%E4%B8%8A%E4%B8%8B%E6%96%87/" class="archive-article-date">
+  	<time datetime="2019-09-23T13:47:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="flask应用上下文和请求上下文"><a href="#flask应用上下文和请求上下文" class="headerlink" title="flask应用上下文和请求上下文"></a>flask应用上下文和请求上下文</h2><p>虽然现在已经是python3的时代，一些开发库已经不支持python2并且asyncio也越来越多的被应用。<br>但是个人感觉如果要解决高并发问题，使用asyncio并不是很好的实践。因为协程之间并不是简单的调用切换，还涉及到一些协程间通信。<br>使用python还是以‘顺序’编程为主，如果公司对高并发真的是有急迫的需求，更好的选择应该是<code>golang</code></p>
+<p>与<code>flask</code>对应的异步web框架是<code>sanic</code>。两者的编程风格很相似，包括核心app的构建方法，路由等。<br><code>sanic</code>是基于asyncio的事件回调机制来完成的，与tornado（老版的tornado是基于yield实现的类似于协程的切换）相比，性能及可读性更高一些。</p>
+<p>我个人实际开发中对并发并没有很高的要求，所以应用最多的还是flask，原因很简单-需求驱动。</p>
+<p>简单整理了flask的应用上下文和请求上下文的处理过程。<br><img src="/images/flask.png" alt=""></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color1">python,flask,随笔</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/09/23/flask%E5%BA%94%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87&%E8%AF%B7%E6%B1%82%E4%B8%8A%E4%B8%8B%E6%96%87/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
 
 
@@ -512,11 +589,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color5">moviepy,docker</a>
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color1">python,flask,随笔</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color2">golang</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color5">moviepy,docker</a>
               </li>
             
             <div class="clearfix"></div>
