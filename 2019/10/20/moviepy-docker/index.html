@@ -6,14 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Category: 后端 | SHERPA-ZARIC</title>
+  <title>moviepy 中文镜像 | SHERPA-ZARIC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="SHERPA-ZARIC">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;categories&#x2F;%E5%90%8E%E7%AB%AF&#x2F;index.html">
+  <meta name="description" content="首先是系统的环境问题。linux 安装 moviepy需要很多依赖，安装起来费神费力。配置起来也非常麻烦，最简单的办法是直接使用他人构建好的镜像文件。">
+<meta name="keywords" content="docker,moviepy">
+<meta property="og:type" content="article">
+<meta property="og:title" content="moviepy 中文镜像">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;20&#x2F;moviepy-docker&#x2F;index.html">
 <meta property="og:site_name" content="SHERPA-ZARIC">
+<meta property="og:description" content="首先是系统的环境问题。linux 安装 moviepy需要很多依赖，安装起来费神费力。配置起来也非常麻烦，最简单的办法是直接使用他人构建好的镜像文件。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;1200357-20190919202017204-216254823.png">
+<meta property="og:updated_time" content="2019-11-03T13:09:53.320Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;1200357-20190919202017204-216254823.png">
   
     <link rel="alternative" href="/atom.xml" title="SHERPA-ZARIC" type="application/atom+xml">
   
@@ -153,75 +159,202 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-moviepy-docker" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/09/13/elaskticsearch/" class="archive-article-date">
-  	<time datetime="2019-09-13T13:47:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-13</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/09/13/elaskticsearch/">Elasticsearch－基础介绍及索引原理分析</a>
+    <h1 class="article-title" itemprop="name">
+      moviepy 中文镜像
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2019/10/20/moviepy-docker/" class="archive-article-date">
+  	<time datetime="2019-10-20T09:17:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="首先是系统的环境问题。"><a href="#首先是系统的环境问题。" class="headerlink" title="首先是系统的环境问题。"></a>首先是系统的环境问题。</h2><p>linux 安装 moviepy需要很多依赖，安装起来费神费力。配置起来也非常麻烦，最简单的办法是直接使用他人构建好的镜像文件。</p>
+<a id="more"></a>
+
+<h2 id="再就是字体显示问题。"><a href="#再就是字体显示问题。" class="headerlink" title="再就是字体显示问题。"></a>再就是字体显示问题。</h2><p>镜像中的imagmagick不支持中文的字体。生成的视频中文乱码，搜索了好!</p>
+<p>长时间，决定自己手动构建一个镜像。参考的文章链接：</p>
+<p><a href="https://www.cnblogs.com/dunkbird/p/5623209.html" target="_blank" rel="noopener">linux追加中文字库，解决imagemagick 中文乱码的问题</a></p>
+<p><a href="https://blog.csdn.net/soulmate_P/article/details/8785642" target="_blank" rel="noopener">Linux(Ubuntu，Cent OS)环境安装mkfontscale mkfontdir命令以及中文字库</a></p>
+<p>步骤简单分为几步：</p>
+<ul>
+<li>拷贝本地Windows下的font（选择你想要的）到镜像中。</li>
+<li>镜像安装构建字体的依赖</li>
+<li>构建字体文件夹</li>
+<li>build 镜像</li>
+</ul>
+<p>放一下Dockerfile</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">FROM dkarchmervue/moviepy:latest</span><br><span class="line"># 我在同级目录下创建了一个windows_fonts文件夹，里面放着从window下拷贝过来的文件。考本到镜像的字体文件夹下。</span><br><span class="line">COPY ./wondow_fonts/ /usr/share/fonts/windows/</span><br><span class="line"># 更改ubuntu镜像源，dkarchmervue/moviepy是基于ubuntu14.04，找一个镜像源，在本地创建一个sources.list的文件，拷贝到镜像中就可以。</span><br><span class="line">RUN cp /etc/apt/sources.list /etc/apt/sources.list.bak</span><br><span class="line">COPY sources.list /etc/apt/sources.list </span><br><span class="line">RUN apt-get update</span><br><span class="line"># 安装添加字体的依赖</span><br><span class="line">RUN apt-get install ttf-mscorefonts-installer -y &amp;&amp; apt-get install fontconfig -y\</span><br><span class="line">     &amp;&amp; apt-get install fontconfig \</span><br><span class="line">    &amp;&amp; cd /usr/share/fonts/windows/ &amp;&amp; chmod 777 * &amp;&amp; mkfontscale &amp;&amp; mkfontdir &amp;&amp; fc-cache</span><br><span class="line">WORKDIR /work/</span><br></pre></td></tr></table></figure>
+<p>这样就制作了一个基于<code>dkarchmervue/moviepy</code> 的带中文字体的镜像。<br>然后直接运行 <code>docker build -t moviepy_cnfonts .</code> 即可创建一个名为 moviepy_cnfonts的镜像。可以把这个镜像替代<code>dkarchmervue/moviepy:latest</code>这个镜像作为运行 python文件的基础镜像。</p>
+<p>运行moviepy官方的结尾特效 end_effect<br><img src="/images/1200357-20190919202017204-216254823.png" alt=""></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" target="_blank" rel="noopener" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/images/zhifubao.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color4">elasticsearch</a>
+        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color2">docker</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color3">转载</a>
+        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color3">moviepy</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/后端//" class="article-tag-list-link color3">后端</a>
-        		</li>
-      		
-		</ul>
-	</div>
+      
 
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" target="_blank" rel="noopener" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/10/20/moviepy-docker/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2019/10/20/docker-multi-from/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          docker file中使用多个FROM
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2019/10/03/python-cache/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">python-cache</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -244,10 +377,10 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
-		isCategory: true,
+		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
 		root: "/",

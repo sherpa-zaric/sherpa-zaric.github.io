@@ -6,13 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Category: 后端 | SHERPA-ZARIC</title>
+  <title>docker file中使用多个FROM | SHERPA-ZARIC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="SHERPA-ZARIC">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;categories&#x2F;%E5%90%8E%E7%AB%AF&#x2F;index.html">
+  <meta name="description" content="能否使用多个FROM?在使用docker过程中，dockerhub上的docker镜像往往已经能够满足需求，然鹅，需求是无止境的。有时候我们需要特殊定制一些镜像。我们需要A镜像中的一些文件,以及B镜像中的另外一些文件，以及….">
+<meta name="keywords" content="docker,golang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker file中使用多个FROM">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;20&#x2F;docker-multi-from&#x2F;index.html">
 <meta property="og:site_name" content="SHERPA-ZARIC">
+<meta property="og:description" content="能否使用多个FROM?在使用docker过程中，dockerhub上的docker镜像往往已经能够满足需求，然鹅，需求是无止境的。有时候我们需要特殊定制一些镜像。我们需要A镜像中的一些文件,以及B镜像中的另外一些文件，以及….">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-03T13:12:48.244Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="SHERPA-ZARIC" type="application/atom+xml">
@@ -153,75 +157,229 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-docker-multi-from" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/09/13/elaskticsearch/" class="archive-article-date">
-  	<time datetime="2019-09-13T13:47:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-13</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/09/13/elaskticsearch/">Elasticsearch－基础介绍及索引原理分析</a>
+    <h1 class="article-title" itemprop="name">
+      docker file中使用多个FROM
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2019/10/20/docker-multi-from/" class="archive-article-date">
+  	<time datetime="2019-10-20T09:17:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="能否使用多个FROM"><a href="#能否使用多个FROM" class="headerlink" title="能否使用多个FROM?"></a>能否使用多个FROM?</h2><p>在使用docker过程中，dockerhub上的docker镜像往往已经能够满足需求，<br>然鹅，需求是无止境的。有时候我们需要特殊定制一些镜像。我们需要A镜像中的一些文件,以及B镜像中的另外一些文件，以及….</p>
+<a id="more"></a>
+<h2 id="多个-FROM-指令的意义"><a href="#多个-FROM-指令的意义" class="headerlink" title="多个 FROM 指令的意义"></a>多个 FROM 指令的意义</h2><p>多个 FROM 指令并不是为了生成多根的层关系，最后生成的镜像，仍以最后一条 FROM 为准，之前的 FROM 会被抛弃，那么之前的FROM 又有什么意义呢？</p>
+<p>每一条 FROM 指令都是一个构建阶段，多条 FROM 就是多阶段构建，虽然最后生成的镜像只能是最后一个阶段的结果，但是，能够将前置阶段中的文件拷贝到后边的阶段中，这就是多阶段构建的最大意义。</p>
+<h2 id="构造器模式是什么？"><a href="#构造器模式是什么？" class="headerlink" title="构造器模式是什么？"></a>构造器模式是什么？</h2><p>对于像Golang这样的静态编译语言，人们倾向于从Golang“ SDK”映像中获取其Dockerfile，添加源代码，进行构建，然后将其推送到Docker Hub。但是生成的镜像的大小至少为670M。</p>
+<p>一种非官方的构造器模式(<strong>builder pattern</strong>) 的解决方法是使用两个Docker映像-一个用于执行构建，另一个用于发送第一个构建的结果，而不会破坏第一个映像中的构建链和工具。<br>Golang并不是唯一可以通过使用一个基础映像来构建资产并使用第二个映像来运行资产而受益的语言。<br>在Windows容器中的工作也使用此模式来生成较小的图像。</p>
+<p>builder pattern的示例：</p>
+<ol>
+<li>从Golang基本映像派生整个运行时/ SDK（Dockerfile.build）</li>
+<li>添加源代码</li>
+<li>产生一个静态链接的二进制文件</li>
+<li>将静态二进制文件从镜像复制到主机（docker create，docker cp）</li>
+<li>从<code>SCRATCH</code>或其他轻量级映像分离，例如<code>alpine</code>（Dockerfile）</li>
+<li>重新添加二进制文件</li>
+<li>将这个很小的映像推送到Docker Hub</li>
+</ol>
+<p>这意味着要有两个单独的Dockerfile和一个Shell脚本来编排以上所有7个步骤。</p>
+<p>以一个golang的项目为例：</p>
+<p>Dockerfile.build</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">FROM golang:1.7.3</span><br><span class="line"></span><br><span class="line">WORKDIR /go/src/github.com/alexellis/href-counter/</span><br><span class="line"></span><br><span class="line">RUN go get -d -v golang.org/x/net/html</span><br><span class="line">COPY app.go	.</span><br><span class="line"></span><br><span class="line">RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .</span><br></pre></td></tr></table></figure>
+
+<p>Dockerfile</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">FROM alpine:latest</span><br><span class="line">RUN apk --no-cache add ca-certificates</span><br><span class="line"></span><br><span class="line">WORKDIR /root/</span><br><span class="line"></span><br><span class="line">COPY app    .</span><br><span class="line"></span><br><span class="line">CMD [&quot;./app&quot;]</span><br></pre></td></tr></table></figure>
+<p>build.sh</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line">echo Building alexellis2/href-counter:build</span><br><span class="line"></span><br><span class="line">docker build --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy \</span><br><span class="line">    -t alexellis2/href-counter:build . -f Dockerfile.build</span><br><span class="line"></span><br><span class="line">docker create --name extract alexellis2/href-counter:build </span><br><span class="line">docker cp extract:/go/src/github.com/alexellis/href-counter/app ./app</span><br><span class="line">docker rm -f extract</span><br><span class="line"></span><br><span class="line">echo Building alexellis2/href-counter:latest</span><br><span class="line"></span><br><span class="line">docker build --no-cache -t alexellis2/href-counter:latest .</span><br></pre></td></tr></table></figure>
+
+<h2 id="什么是多阶段构建？"><a href="#什么是多阶段构建？" class="headerlink" title="什么是多阶段构建？"></a>什么是多阶段构建？</h2><p>多阶段构建具有构建器模式的优点，而无需维护三个单独的文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">FROM golang:1.7.3</span><br><span class="line"></span><br><span class="line">WORKDIR /go/src/github.com/alexellis/href-counter/</span><br><span class="line"></span><br><span class="line">RUN go get -d -v golang.org/x/net/html</span><br><span class="line">COPY app.go	.</span><br><span class="line"></span><br><span class="line">RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .</span><br><span class="line"></span><br><span class="line">FROM alpine:latest</span><br><span class="line">RUN apk --no-cache add ca-certificates</span><br><span class="line"></span><br><span class="line">WORKDIR /root/</span><br><span class="line"></span><br><span class="line">COPY --from=0 /go/src/github.com/alexellis/href-counter/app    .</span><br><span class="line"></span><br><span class="line">CMD [&quot;./app&quot;]</span><br></pre></td></tr></table></figure>
+
+<p>但是，对于开发者和维护者来说，这仍然很大，特别是使用树莓派的用户。<br>在Dockerfile中使用多个FROM-以最后一条FROM语句为最终基础映像为准<br>。要复制中间图像的伪像和输出，<br>请使用<code>COPY --from=镜像号码</code></p>
+<p>改进后的语法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">FROM golang:1.7.3 as builder</span><br><span class="line"></span><br><span class="line">WORKDIR /go/src/github.com/alexellis/href-counter/</span><br><span class="line"></span><br><span class="line">RUN go get -d -v golang.org/x/net/html</span><br><span class="line">COPY app.go	.</span><br><span class="line"></span><br><span class="line">RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .</span><br><span class="line"></span><br><span class="line">FROM alpine:latest</span><br><span class="line">RUN apk --no-cache add ca-certificates</span><br><span class="line"></span><br><span class="line">WORKDIR /root/</span><br><span class="line"></span><br><span class="line">COPY --from=builder /go/src/github.com/alexellis/href-counter/app    .</span><br><span class="line"></span><br><span class="line">CMD [&quot;./app&quot;]</span><br></pre></td></tr></table></figure>
+
+<p>有些程序要么没有apt源，要么apt源中的版本太老，<br>要么干脆只提供源码需要自己编译，使用这些程序时，<br>我们可以方便地使用已经存在的Docker镜像源作为我们的基础镜像。<br>但是我们的软件有时候可能需要依赖多个这种文件，<br>我们并不能同时将 nginx 和 etcd 的镜像同时作为我们的基础镜像<br>（不支持多根），这种情况下，使用 COPY –from 就非常方便实用了。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" target="_blank" rel="noopener" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/images/zhifubao.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color4">elasticsearch</a>
+        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color2">docker</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color3">转载</a>
+        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color2">golang</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/后端//" class="article-tag-list-link color3">后端</a>
+        			<a href="/categories/golang//" class="article-tag-list-link color2">golang</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" target="_blank" rel="noopener" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/10/20/docker-multi-from/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2019/11/02/golang%E5%B0%8F%E6%8A%80%E5%B7%A7/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          golang一些有用的小技巧
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2019/10/20/moviepy-docker/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">moviepy 中文镜像</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -244,10 +402,10 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
-		isCategory: true,
+		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
 		root: "/",
