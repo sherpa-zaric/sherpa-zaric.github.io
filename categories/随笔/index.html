@@ -6,17 +6,13 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>python-cache | SHERPA-ZARIC</title>
+  <title>Category: 随笔 | SHERPA-ZARIC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="msgpack介绍在阅读sanic相关项目的时候 Sanic-For-Pythoneer 阅读代码过程中发现几个比较好用的python库， 1. cached缓存其实应用场景还是比较多的。比如我现在应用的就是对 从database中获取到的数据做缓存，设置ttl(time to live)以减小数据库压力。">
-<meta name="keywords" content="python">
-<meta property="og:type" content="article">
-<meta property="og:title" content="python-cache">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;03&#x2F;python-cache&#x2F;index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="SHERPA-ZARIC">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;categories&#x2F;%E9%9A%8F%E7%AC%94&#x2F;index.html">
 <meta property="og:site_name" content="SHERPA-ZARIC">
-<meta property="og:description" content="msgpack介绍在阅读sanic相关项目的时候 Sanic-For-Pythoneer 阅读代码过程中发现几个比较好用的python库， 1. cached缓存其实应用场景还是比较多的。比如我现在应用的就是对 从database中获取到的数据做缓存，设置ttl(time to live)以减小数据库压力。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-03T13:09:53.335Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="SHERPA-ZARIC" type="application/atom+xml">
@@ -157,201 +153,79 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-python-cache" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      python-cache
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2019" class="archive-year">2019</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2019/07/20/shadowsockts%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" class="archive-article-date">
+  	<time datetime="2019-07-20T04:00:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-20</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2019/07/20/shadowsockts%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/">shadowsocks源码解读</a>
     </h1>
   
 
-        
-        <a href="/2019/10/03/python-cache/" class="archive-article-date">
-  	<time datetime="2019-10-03T04:42:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="msgpack介绍"><a href="#msgpack介绍" class="headerlink" title="msgpack介绍"></a>msgpack介绍</h2><p>在阅读sanic相关项目的时候 <a href=""https://github.com/howie6879/Sanic-For-Pythoneer/blob/master/docs/part1/6.%E5%B8%B8%E7%94%A8%E7%9A%84%E6%8A%80%E5%B7%A7.md"">Sanic-For-Pythoneer</a> 阅读代码过程中发现几个比较好用的python库，</p>
-<h3 id="1-cached"><a href="#1-cached" class="headerlink" title="1. cached"></a>1. cached</h3><p>缓存其实应用场景还是比较多的。比如我现在应用的就是对 从database中获取到的数据做缓存，设置ttl(time to live)以减小数据库压力。</p>
-<a id="more"></a>
-<p>cached的简单应用 （python = 3.7）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import aiocache</span><br><span class="line">from aiocache.serializers import NullSerializer, StringSerializer, \</span><br><span class="line">    PickleSerializer</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@aiocache.cached(ttl=10, serializer=PickleSerializer())</span><br><span class="line">async def get_res():</span><br><span class="line">    print(&quot;get_res(): int(11)&quot;)</span><br><span class="line">    return 11</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    import asyncio</span><br><span class="line"></span><br><span class="line">    loop = asyncio.get_event_loop()</span><br><span class="line">    data = asyncio.run(get_res())</span><br><span class="line">    print(type(data), data)</span><br><span class="line">    data = asyncio.run(get_res())</span><br><span class="line">    print(type(data), data)</span><br></pre></td></tr></table></figure>
-<p>aiocache实现并不复杂。介绍一下 SimpleMemoryCache。大致的思路就是 把数据保存到字典中，key默认为 model_name+ func_name + args + kwargs 组合（可以指定key的值），到了ttl设定的时间就把map中的键值pop出去。<br>其他的也是类似的思路。</p>
-<p>这里值得注意的是 <code>serializer</code>这个参数。如果是使用 <code>SimpleMemoryCache</code>作为缓存，默认是使用 <code>NullSerializer</code>作为序列化工具的，即set的任何内容都可以在get时原样获取，在本地内存中这一点问题没有。<br>如果需要对对象序列化 建议使用 <code>PickleSerializer</code><br><a href=""https://www.zhihu.com/question/38355589"">我是pickle</a></p>
-<p>但是如果使用redis作为缓存，会发生一些预测不到的错误。解决办法是使用：<code>JsonSerializer</code>,内部使用的是 <code>ujson</code>作为序列化工具。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">json module and ujson:</span><br><span class="line">        - ujson dumps supports bytes while json doesn&apos;t</span><br><span class="line">        - ujson and json outputs may differ sometimes</span><br></pre></td></tr></table></figure>
-
-<p>还有一个 <code>MsgPackSerializer</code>,</p>
-<p><code>Transform data to bytes using msgpack.dumps and msgpack.loads to retrieve it back.</code></p>
-<p>还有一个序列化参数，用的比较少，<code>StringSerializer</code>,比如你缓存的是 1，在下次获取缓存结果的时候会给你返回 <code>&#39;1&#39;</code>。</p>
-<h3 id="2-msgpack"><a href="#2-msgpack" class="headerlink" title="2. msgpack"></a>2. msgpack</h3><p>msgpack 是cached包安装时候的依赖。进入源码，发现其对外提供的API非常简单，用法与 ujson,json 等序列/反序列工具基本一直。</p>
-<p>其源码中对外暴露方法做了常规化处理，这样我们用起来很快适应</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># alias for compatibility to simplejson/marshal/pickle.</span><br><span class="line">load = unpack</span><br><span class="line">loads = unpackb</span><br><span class="line"></span><br><span class="line">dump = pack</span><br><span class="line">dumps = packb</span><br></pre></td></tr></table></figure>
-
-<p>msgpack的优势是：msgpack用起来像json，但是却比json快，并且序列化以后的数据长度更小，言外之意，使用msgpack不仅序列化和反序列化的速度快，数据传输量也比json格式小，msgpack同样支持多种语言。</p>
-<p>我们平时主要会用到 <code>loads</code> 等同于 <code>unpackb</code> , <code>dumps</code> 等同于 <code>packb</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;import msgpack</span><br><span class="line">&gt;&gt;&gt;animal = &#123;&quot;color&quot;:&quot;pink&quot;,&quot;name&quot;:&quot;duck&quot;&#125;</span><br><span class="line">&gt;&gt;&gt;msgpack.dumps(animal) // 比 json.dumps(x)的长度更小</span><br><span class="line">b&apos;\x82\xa5color\xa4pink\xa4name\xa4duck&apos;</span><br><span class="line">&gt;&gt;&gt;msgpack.loads(msgpack.dumps(animal))</span><br><span class="line">&#123;b&apos;color&apos;: b&apos;pink&apos;, b&apos;name&apos;: b&apos;duck&apos;&#125;</span><br><span class="line">&gt;&gt;&gt;msgpack.loads(msgpack.dumps(animal),encoding=&quot;utf-8&quot;) // 转会初始状态的字符串，需要加上 encoding这个参数，内部会调用decode()方法</span><br><span class="line">&#123;&apos;color&apos;: &apos;pink&apos;, &apos;name&apos;: &apos;duck&apos;&#125;</span><br></pre></td></tr></table></figure>
-<p>另外 load 和 dump的用法和json.load &amp; json.dump用法相同。<br>该包源码非常简单，有兴趣的可以去看看源码</p>
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" target="_blank" rel="noopener" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/images/zhifubao.jpg">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color3">转载</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color2">python</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color3">随笔</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/随笔//" class="article-tag-list-link color3">随笔</a>
+        		</li>
+      		
+		</ul>
+	</div>
 
-      
 
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" target="_blank" rel="noopener" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/10/03/python-cache/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2019/10/20/moviepy-docker/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          moviepy 中文镜像
-        
-      </div>
-    </a>
   
   
-    <a href="/2019/09/23/flask-is-not-production-server/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">flask.run()不是你的服务器！</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
+    
 
 
           </div>
@@ -374,10 +248,10 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
 		isTag: false,
-		isCategory: false,
+		isCategory: true,
 		open_in_new: false,
 		toc_hide_index: true,
 		root: "/",
