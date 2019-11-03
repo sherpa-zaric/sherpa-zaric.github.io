@@ -6,13 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: golang | SHERPA-ZARIC</title>
+  <title>实现tornado login_required() | SHERPA-ZARIC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="SHERPA-ZARIC">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;tags&#x2F;golang&#x2F;index.html">
+  <meta name="description" content="tornado作为鼎鼎大名的web异步框架，用来作为高性能服务器以及web框架都是首选。自从python3.4加入了asyncio原生协程后，tornado的最新版本也开始使用了原生的协程。定义协程函数的时候就很简单了，也可以像sanic一样使用async def了。 class LoginHandler(RequestHandler):    async def post(self, args,">
+<meta name="keywords" content="python,tornado">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实现tornado login_required()">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;08&#x2F;01&#x2F;tornado-login-required&#x2F;index.html">
 <meta property="og:site_name" content="SHERPA-ZARIC">
+<meta property="og:description" content="tornado作为鼎鼎大名的web异步框架，用来作为高性能服务器以及web框架都是首选。自从python3.4加入了asyncio原生协程后，tornado的最新版本也开始使用了原生的协程。定义协程函数的时候就很简单了，也可以像sanic一样使用async def了。 class LoginHandler(RequestHandler):    async def post(self, args,">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-03T08:59:25.228Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="SHERPA-ZARIC" type="application/atom+xml">
@@ -153,60 +157,188 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-tornado-login-required" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/11/02/golang%E5%B0%8F%E6%8A%80%E5%B7%A7/" class="archive-article-date">
-  	<time datetime="2019-11-02T13:47:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-02</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/02/golang%E5%B0%8F%E6%8A%80%E5%B7%A7/">golang一些有用的小技巧</a>
+    <h1 class="article-title" itemprop="name">
+      实现tornado login_required()
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2019/08/01/tornado-login-required/" class="archive-article-date">
+  	<time datetime="2019-08-01T06:20:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>tornado作为鼎鼎大名的web异步框架，用来作为高性能服务器以及web框架都是首选。自从python3.4加入了asyncio原生协程后，tornado的最新版本也开始使用了原生的协程。定义协程函数的时候就很简单了，也可以像sanic一样使用async def了。</p>
+<p>class LoginHandler(RequestHandler):<br>    async def post(self, <em>args, *</em>kwargs):<br>        …<br>        pass<br>一般的web项目都会有登陆的功能，这就涉及到了登陆验证，在做这一部分功能的时候，我使用的是 jwt – json web token的方法验证是否登陆。当然也可以使用类似于django的session验证。各自均有优缺点。</p>
+<p>通常需要验证是否登陆的模块很多，一般都会写一个登陆验证装饰器，tornado实现了登陆验证装饰器 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">def authenticated(method):</span><br><span class="line">    &quot;&quot;&quot;Decorate methods with this to require that the user be logged in.</span><br><span class="line"></span><br><span class="line">    If the user is not logged in, they will be redirected to the configured</span><br><span class="line">    `login url &lt;RequestHandler.get_login_url&gt;`.</span><br><span class="line"></span><br><span class="line">    If you configure a login url with a query parameter, Tornado will</span><br><span class="line">    assume you know what you&apos;re doing and use it as-is.  If not, it</span><br><span class="line">    will add a `next` parameter so the login page knows where to send</span><br><span class="line">    you once you&apos;re logged in.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    @functools.wraps(method)</span><br><span class="line">    def wrapper(self, *args, **kwargs):</span><br><span class="line">        if not self.current_user:</span><br><span class="line">            if self.request.method in (&quot;GET&quot;, &quot;HEAD&quot;):</span><br><span class="line">                url = self.get_login_url()</span><br><span class="line">                if &quot;?&quot; not in url:</span><br><span class="line">                    if urlparse.urlsplit(url).scheme:</span><br><span class="line">                        # if login url is absolute, make next absolute too</span><br><span class="line">                        next_url = self.request.full_url()</span><br><span class="line">                    else:</span><br><span class="line">                        next_url = self.request.uri</span><br><span class="line">                    url += &quot;?&quot; + urlencode(dict(next=next_url))</span><br><span class="line">                self.redirect(url)</span><br><span class="line">                return</span><br><span class="line">            raise HTTPError(403)</span><br><span class="line">        return method(self, *args, **kwargs)</span><br><span class="line">    return wrapper</span><br></pre></td></tr></table></figure>
+<p>method(self,<em>args,*</em>kwargs)即为要装饰的函数。但是如果 像上面定义的post方法 async def post(self, <em>args, *</em>kwargs),作为一个协程函数，就不能再使用这个装饰器了，就需要改写一下这个装饰器。def authenticated_async(method):</p>
+<p>初始化app的过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">import tornado</span><br><span class="line">from peewee_async import Manager</span><br><span class="line"></span><br><span class="line">from YourApp.urls import urlpattern</span><br><span class="line">from YourApp.settings import settings, database</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line"></span><br><span class="line">    #集成json到wtforms</span><br><span class="line">    import wtforms_json</span><br><span class="line">    wtforms_json.init()</span><br><span class="line"></span><br><span class="line">    app = web.Application(urlpattern, debug=True, **settings)</span><br><span class="line">    app.listen(80)</span><br><span class="line"></span><br><span class="line">    objects = Manager(database)</span><br><span class="line">    database.set_allow_sync(False)</span><br><span class="line">    app.objects = objects</span><br><span class="line"></span><br><span class="line">    tornado.ioloop.IOLoop.current().start()</span><br></pre></td></tr></table></figure>
+
+<p>登陆装饰器改写</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">@functools.wraps(method)</span><br><span class="line">async def wrapper(self, *args, **kwargs):</span><br><span class="line">    tsessionid = self.request.headers.get(&quot;tsessionid&quot;, None)</span><br><span class="line">    if tsessionid:</span><br><span class="line">        try:</span><br><span class="line"></span><br><span class="line">            send_data = jwt.decode(tsessionid, self.settings[&quot;secret_key&quot;], leeway=self.settings[&quot;jwt_expire&quot;], options=&#123;&quot;verify_exp&quot;: True&#125;)</span><br><span class="line">            user_id = send_data[&quot;id&quot;]</span><br><span class="line">            # User 的model类，根据实际情况调整</span><br><span class="line">            #从数据库中获取到user并设置给_current_user</span><br><span class="line">            try:</span><br><span class="line">                user = await self.application.objects.get(User, id=user_id)</span><br><span class="line">                self._current_user = user</span><br><span class="line"></span><br><span class="line">                # 协程的调用方式</span><br><span class="line">                await method(self, *args, **kwargs)</span><br><span class="line">            except User.DoesNotExist as e:</span><br><span class="line">                self.set_status(401)</span><br><span class="line">        except jwt.ExpiredSignatureError as e: # 验证jwt 是否过期</span><br><span class="line">            self.set_status(401)</span><br><span class="line">    else:</span><br><span class="line">        self.set_status(401)</span><br><span class="line">    self.finish(&#123;&#125;)</span><br><span class="line"></span><br><span class="line">return wrapper</span><br></pre></td></tr></table></figure>
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" target="_blank" rel="noopener" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/images/zhifubao.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color2">golang</a>
+        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color2">python</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color3">tornado</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" target="_blank" rel="noopener" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/08/01/tornado-login-required/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2019/09/13/elaskticsearch/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Elasticsearch－基础介绍及索引原理分析
+        
+      </div>
+    </a>
   
   
-    </div></section>
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -229,9 +361,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
