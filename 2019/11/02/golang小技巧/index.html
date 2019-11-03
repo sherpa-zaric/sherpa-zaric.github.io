@@ -8,15 +8,15 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>golang一些有用的小技巧 | SHERPA-ZARIC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="初始化一个定时器来源链接 ticker := time.NewTimer(2 * time.Second)这样就初始化了一个2秒的定时器 再看一个实际的例子 1234567891011121314151617package mainimport (    &amp;quot;fmt&amp;quot;    &amp;quot;time&amp;quot;)func main()&amp;#123;    &#x2F;&#x2F;初始化定时器    t :">
+  <meta name="description" content="初始化一个定时器来源链接 ticker := time.NewTimer(2 * time.Second)这样就初始化了一个2秒的定时器 再看一个实际的例子">
 <meta name="keywords" content="golang">
 <meta property="og:type" content="article">
 <meta property="og:title" content="golang一些有用的小技巧">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;02&#x2F;golang%E5%B0%8F%E6%8A%80%E5%B7%A7&#x2F;index.html">
 <meta property="og:site_name" content="SHERPA-ZARIC">
-<meta property="og:description" content="初始化一个定时器来源链接 ticker := time.NewTimer(2 * time.Second)这样就初始化了一个2秒的定时器 再看一个实际的例子 1234567891011121314151617package mainimport (    &amp;quot;fmt&amp;quot;    &amp;quot;time&amp;quot;)func main()&amp;#123;    &#x2F;&#x2F;初始化定时器    t :">
+<meta property="og:description" content="初始化一个定时器来源链接 ticker := time.NewTimer(2 * time.Second)这样就初始化了一个2秒的定时器 再看一个实际的例子">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-02T19:18:42.305Z">
+<meta property="og:updated_time" content="2019-11-03T08:35:20.288Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="SHERPA-ZARIC" type="application/atom+xml">
@@ -180,6 +180,7 @@
         <h2 id="初始化一个定时器"><a href="#初始化一个定时器" class="headerlink" title="初始化一个定时器"></a>初始化一个定时器</h2><p><a href="https://www.kancloud.cn/digest/batu-go/153534" target="_blank" rel="noopener">来源链接</a></p>
 <p><code>ticker := time.NewTimer(2 * time.Second)</code><br>这样就初始化了一个2秒的定时器</p>
 <p>再看一个实际的例子</p>
+<a id="more"></a>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">    &quot;fmt&quot;</span><br><span class="line">    &quot;time&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func main()&#123;</span><br><span class="line">    //初始化定时器</span><br><span class="line">    t := time.NewTimer(2 * time.Second)</span><br><span class="line">    //当前时间</span><br><span class="line">    now := time.Now()</span><br><span class="line">    fmt.Printf(&quot;Now time : %v.\n&quot;, now)</span><br><span class="line"></span><br><span class="line">    expire := &lt;- t.C</span><br><span class="line">    fmt.Printf(&quot;Expiration time: %v.\n&quot;, expire)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>所以time包的NewTimer可以应用在一些调度任务中</p>
 <p>再看一下复杂点的操作：</p>
@@ -434,6 +435,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color4">elasticsearch</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">转载</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color2">python</a>
               </li>
              
@@ -447,14 +456,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color1">python,flask,随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color4">elasticsearch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">转载</a>
               </li>
              
               <li class="article-tag-list-item">

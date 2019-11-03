@@ -8,15 +8,15 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>flask.run()不是你的服务器！ | SHERPA-ZARIC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="不要再用flask.run()部署项目了！在维护公司老项目,服务器查看运行着一个flask项目。用简单的单进程跑在机器上。查看详细的信息，发现是直接用这种方式运行的。 12345678@app.route(&amp;apos;&#x2F;&amp;apos;)def route1():   pass   .....if __name__ == &amp;apos;__main__&amp;apos;:    app.run(....)">
+  <meta name="description" content="不要再用flask.run()部署项目了！在维护公司老项目,服务器查看运行着一个flask项目。用简单的单进程跑在机器上。查看详细的信息，发现是直接用这种方式运行的。 1234567@app.route(&amp;apos;&#x2F;&amp;apos;)def route1():   pass   ...if __name__ == &amp;apos;__main__&amp;apos;:    app.run(....)">
 <meta name="keywords" content="python,flask,随笔">
 <meta property="og:type" content="article">
 <meta property="og:title" content="flask.run()不是你的服务器！">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;09&#x2F;23&#x2F;flask-is-not-production-server&#x2F;index.html">
 <meta property="og:site_name" content="SHERPA-ZARIC">
-<meta property="og:description" content="不要再用flask.run()部署项目了！在维护公司老项目,服务器查看运行着一个flask项目。用简单的单进程跑在机器上。查看详细的信息，发现是直接用这种方式运行的。 12345678@app.route(&amp;apos;&#x2F;&amp;apos;)def route1():   pass   .....if __name__ == &amp;apos;__main__&amp;apos;:    app.run(....)">
+<meta property="og:description" content="不要再用flask.run()部署项目了！在维护公司老项目,服务器查看运行着一个flask项目。用简单的单进程跑在机器上。查看详细的信息，发现是直接用这种方式运行的。 1234567@app.route(&amp;apos;&#x2F;&amp;apos;)def route1():   pass   ...if __name__ == &amp;apos;__main__&amp;apos;:    app.run(....)">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-03T06:40:44.281Z">
+<meta property="og:updated_time" content="2019-11-03T08:33:34.520Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="SHERPA-ZARIC" type="application/atom+xml">
@@ -178,8 +178,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h3 id="不要再用flask-run-部署项目了！"><a href="#不要再用flask-run-部署项目了！" class="headerlink" title="不要再用flask.run()部署项目了！"></a>不要再用flask.run()部署项目了！</h3><p>在维护公司老项目,服务器查看运行着一个flask项目。用简单的单进程跑在机器上。<br>查看详细的信息，发现是直接用这种方式运行的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@app.route(&apos;/&apos;)</span><br><span class="line">def route1():</span><br><span class="line">   pass</span><br><span class="line">   </span><br><span class="line">.....</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    app.run(....)</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@app.route(&apos;/&apos;)</span><br><span class="line">def route1():</span><br><span class="line">   pass</span><br><span class="line">   ...</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    app.run(....)</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
 <dl><dt>这种方式真的很不好，稍微看一下docs就能看到flask已经给了很明显的警高信息</dt><dd><code>WARNING: This is a development server. Do not use it in a production deployment.</code></dd></dl><h3 id="下面就来讲一讲为何不好-："><a href="#下面就来讲一讲为何不好-：" class="headerlink" title="下面就来讲一讲为何不好 ："></a><strong>下面就来讲一讲为何不好</strong> ：</h3><p>你已经构建了Flask网络应用，并正在部署自己选择的VPS上。这是你的第一个小型应用程序，你希望将app.run上的debug设置为False就足够了？也许也启用线程？</p>
 <p>你真的不应该依赖于此。官方文档也不同意。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">While lightweight and easy to use, Flask’s built-in server is </span><br><span class="line">not suitable for production as it doesn’t scale well </span><br><span class="line">and by default serves only one request at a time.</span><br></pre></td></tr></table></figure>
@@ -460,6 +460,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color4">elasticsearch</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">转载</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color2">python</a>
               </li>
              
@@ -473,14 +481,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color1">python,flask,随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color4">elasticsearch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">转载</a>
               </li>
              
               <li class="article-tag-list-item">

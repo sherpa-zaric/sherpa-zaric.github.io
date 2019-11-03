@@ -8,14 +8,14 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>python-cache | SHERPA-ZARIC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="msgpack介绍在阅读sanic相关项目的时候 Sanic-For-Pythoneer 阅读代码过程中发现几个比较好用的python库， 1. cached缓存其实应用场景还是比较多的。比如我现在应用的就是对 从database中获取到的数据做缓存，设置ttl(time to live)以减小数据库压力。 cached的简单应用 （python = 3.7） 123456789101112131">
+  <meta name="description" content="msgpack介绍在阅读sanic相关项目的时候 Sanic-For-Pythoneer 阅读代码过程中发现几个比较好用的python库， 1. cached缓存其实应用场景还是比较多的。比如我现在应用的就是对 从database中获取到的数据做缓存，设置ttl(time to live)以减小数据库压力。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="python-cache">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;03&#x2F;python-cache&#x2F;index.html">
 <meta property="og:site_name" content="SHERPA-ZARIC">
-<meta property="og:description" content="msgpack介绍在阅读sanic相关项目的时候 Sanic-For-Pythoneer 阅读代码过程中发现几个比较好用的python库， 1. cached缓存其实应用场景还是比较多的。比如我现在应用的就是对 从database中获取到的数据做缓存，设置ttl(time to live)以减小数据库压力。 cached的简单应用 （python = 3.7） 123456789101112131">
+<meta property="og:description" content="msgpack介绍在阅读sanic相关项目的时候 Sanic-For-Pythoneer 阅读代码过程中发现几个比较好用的python库， 1. cached缓存其实应用场景还是比较多的。比如我现在应用的就是对 从database中获取到的数据做缓存，设置ttl(time to live)以减小数据库压力。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-02T18:44:22.126Z">
+<meta property="og:updated_time" content="2019-11-03T08:35:20.297Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="SHERPA-ZARIC" type="application/atom+xml">
@@ -178,6 +178,7 @@
       
         <h2 id="msgpack介绍"><a href="#msgpack介绍" class="headerlink" title="msgpack介绍"></a>msgpack介绍</h2><p>在阅读sanic相关项目的时候 <a href=""https://github.com/howie6879/Sanic-For-Pythoneer/blob/master/docs/part1/6.%E5%B8%B8%E7%94%A8%E7%9A%84%E6%8A%80%E5%B7%A7.md"">Sanic-For-Pythoneer</a> 阅读代码过程中发现几个比较好用的python库，</p>
 <h3 id="1-cached"><a href="#1-cached" class="headerlink" title="1. cached"></a>1. cached</h3><p>缓存其实应用场景还是比较多的。比如我现在应用的就是对 从database中获取到的数据做缓存，设置ttl(time to live)以减小数据库压力。</p>
+<a id="more"></a>
 <p>cached的简单应用 （python = 3.7）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import aiocache</span><br><span class="line">from aiocache.serializers import NullSerializer, StringSerializer, \</span><br><span class="line">    PickleSerializer</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@aiocache.cached(ttl=10, serializer=PickleSerializer())</span><br><span class="line">async def get_res():</span><br><span class="line">    print(&quot;get_res(): int(11)&quot;)</span><br><span class="line">    return 11</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    import asyncio</span><br><span class="line"></span><br><span class="line">    loop = asyncio.get_event_loop()</span><br><span class="line">    data = asyncio.run(get_res())</span><br><span class="line">    print(type(data), data)</span><br><span class="line">    data = asyncio.run(get_res())</span><br><span class="line">    print(type(data), data)</span><br></pre></td></tr></table></figure>
 <p>aiocache实现并不复杂。介绍一下 SimpleMemoryCache。大致的思路就是 把数据保存到字典中，key默认为 model_name+ func_name + args + kwargs 组合（可以指定key的值），到了ttl设定的时间就把map中的键值pop出去。<br>其他的也是类似的思路。</p>
@@ -431,6 +432,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color4">elasticsearch</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">转载</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color2">python</a>
               </li>
              
@@ -444,14 +453,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color1">python,flask,随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color4">elasticsearch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">转载</a>
               </li>
              
               <li class="article-tag-list-item">

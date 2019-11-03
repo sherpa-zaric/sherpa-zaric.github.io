@@ -178,24 +178,7 @@
         <h2 id="初始化一个定时器"><a href="#初始化一个定时器" class="headerlink" title="初始化一个定时器"></a>初始化一个定时器</h2><p><a href="https://www.kancloud.cn/digest/batu-go/153534" target="_blank" rel="noopener">来源链接</a></p>
 <p><code>ticker := time.NewTimer(2 * time.Second)</code><br>这样就初始化了一个2秒的定时器</p>
 <p>再看一个实际的例子</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">    &quot;fmt&quot;</span><br><span class="line">    &quot;time&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func main()&#123;</span><br><span class="line">    //初始化定时器</span><br><span class="line">    t := time.NewTimer(2 * time.Second)</span><br><span class="line">    //当前时间</span><br><span class="line">    now := time.Now()</span><br><span class="line">    fmt.Printf(&quot;Now time : %v.\n&quot;, now)</span><br><span class="line"></span><br><span class="line">    expire := &lt;- t.C</span><br><span class="line">    fmt.Printf(&quot;Expiration time: %v.\n&quot;, expire)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>所以time包的NewTimer可以应用在一些调度任务中</p>
-<p>再看一下复杂点的操作：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">    &quot;fmt&quot;</span><br><span class="line">    &quot;time&quot;</span><br><span class="line">)</span><br><span class="line">func main()&#123;</span><br><span class="line">    //初始化通道</span><br><span class="line">    ch11 := make(chan int, 1000)</span><br><span class="line">    sign := make(chan byte, 1)</span><br><span class="line"></span><br><span class="line">    //给ch11通道写入数据</span><br><span class="line">    for i := 0; i &lt; 1000; i++ &#123;</span><br><span class="line">        ch11 &lt;- i</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //单独起一个Goroutine执行select</span><br><span class="line">    go func()&#123;</span><br><span class="line">        var e int</span><br><span class="line">        ok := true</span><br><span class="line">        //首先声明一个*time.Timer类型的值，然后在相关case之后声明的匿名函数中尽可能的复用它</span><br><span class="line">        var timer *time.Timer</span><br><span class="line"></span><br><span class="line">        for&#123;</span><br><span class="line">            select &#123;</span><br><span class="line">                case e = &lt;- ch11:</span><br><span class="line">                    fmt.Printf(&quot;ch11 -&gt; %d\n&quot;,e)</span><br><span class="line">                case &lt;- func() &lt;-chan time.Time &#123;</span><br><span class="line">                    if timer == nil&#123;</span><br><span class="line">                        //初始化到期时间据此间隔1ms的定时器</span><br><span class="line">                        timer = time.NewTimer(time.Millisecond)</span><br><span class="line">                    &#125;else &#123;</span><br><span class="line">                        //复用，通过Reset方法重置定时器</span><br><span class="line">                        timer.Reset(time.Millisecond)</span><br><span class="line">                    &#125;</span><br><span class="line">                    //得知定时器到期事件来临时，返回结果</span><br><span class="line">                    return timer.C</span><br><span class="line">                &#125;():</span><br><span class="line">                    fmt.Println(&quot;Timeout.&quot;)</span><br><span class="line">                    ok = false</span><br><span class="line">                    break</span><br><span class="line">            &#125;</span><br><span class="line">            //终止for循环</span><br><span class="line">            if !ok &#123;</span><br><span class="line">                sign &lt;- 0</span><br><span class="line">                break</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;()</span><br><span class="line"></span><br><span class="line">    //惯用手法，读取sign通道数据，为了等待select的Goroutine执行。</span><br><span class="line">    &lt;- sign</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="time-After函数"><a href="#time-After函数" class="headerlink" title="time.After函数"></a>time.After函数</h2><p>time.After函数</p>
-<ul>
-<li><p>表示多少时间之后，但是在取出channel内容之前不阻塞，后续程序可以继续执行</p>
-</li>
-<li><p>鉴于After特性，其通常用来处理程序超时问题</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">    &quot;fmt&quot;</span><br><span class="line">    &quot;time&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func main()&#123;</span><br><span class="line">    ch1 := make(chan int, 1)</span><br><span class="line">    ch2 := make(chan int, 1)</span><br><span class="line"></span><br><span class="line">    select &#123;</span><br><span class="line">        case e1 := &lt;-ch1:</span><br><span class="line">        //如果ch1通道成功读取数据，则执行该case处理语句</span><br><span class="line">            fmt.Printf(&quot;1th case is selected. e1=%v&quot;,e1)</span><br><span class="line">        case e2 := &lt;-ch2:</span><br><span class="line">        //如果ch2通道成功读取数据，则执行该case处理语句</span><br><span class="line">            fmt.Printf(&quot;2th case is selected. e2=%v&quot;,e2)</span><br><span class="line">        case &lt;- time.After(2 * time.Second):</span><br><span class="line">            fmt.Println(&quot;Timed out&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="golang打印结构体"><a href="#golang打印结构体" class="headerlink" title="golang打印结构体"></a>golang打印结构体</h3><p>如果使用fmt.println（v）<br>打印的结果往往令人迷惑，要想看到结构体内部的数据可以使用<br><code>fmt.printf(&quot;+v&quot;,v)</code></p>
-<p><strong>如果需要打印的内容是一个<code>[]</code>byte</strong></p>
-<p>那么使用 fmt.printf(“%s”,v)<br>就可以把这个切片字节的字符串打印出来</p>
-
+        
       
 
       
@@ -269,22 +252,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="首先是系统的环境问题。"><a href="#首先是系统的环境问题。" class="headerlink" title="首先是系统的环境问题。"></a>首先是系统的环境问题。</h2><p>linux 安装 moviepy需要很多依赖，安装起来费神费力。配置起来也非常麻烦，最简单的办法是直接使用他人构建好的镜像文件。</p>
-<h2 id="再就是字体显示问题。"><a href="#再就是字体显示问题。" class="headerlink" title="再就是字体显示问题。"></a>再就是字体显示问题。</h2><p>镜像中的imagmagick不支持中文的字体。生成的视频中文乱码，搜索了好!</p>
-<p>长时间，决定自己手动构建一个镜像。参考的文章链接：</p>
-<p><a href="https://www.cnblogs.com/dunkbird/p/5623209.html" target="_blank" rel="noopener">linux追加中文字库，解决imagemagick 中文乱码的问题</a></p>
-<p><a href="https://blog.csdn.net/soulmate_P/article/details/8785642" target="_blank" rel="noopener">Linux(Ubuntu，Cent OS)环境安装mkfontscale mkfontdir命令以及中文字库</a></p>
-<p>步骤简单分为几步：</p>
-<ul>
-<li>拷贝本地Windows下的font（选择你想要的）到镜像中。</li>
-<li>镜像安装构建字体的依赖</li>
-<li>构建字体文件夹</li>
-<li>build 镜像</li>
-</ul>
-<p>放一下Dockerfile</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">FROM dkarchmervue/moviepy:latest</span><br><span class="line"># 我在同级目录下创建了一个windows_fonts文件夹，里面放着从window下拷贝过来的文件。考本到镜像的字体文件夹下。</span><br><span class="line">COPY ./wondow_fonts/ /usr/share/fonts/windows/</span><br><span class="line"># 更改ubuntu镜像源，dkarchmervue/moviepy是基于ubuntu14.04，找一个镜像源，在本地创建一个sources.list的文件，拷贝到镜像中就可以。</span><br><span class="line">RUN cp /etc/apt/sources.list /etc/apt/sources.list.bak</span><br><span class="line">COPY sources.list /etc/apt/sources.list </span><br><span class="line">RUN apt-get update</span><br><span class="line"># 安装添加字体的依赖</span><br><span class="line">RUN apt-get install ttf-mscorefonts-installer -y &amp;&amp; apt-get install fontconfig -y\</span><br><span class="line">     &amp;&amp; apt-get install fontconfig \</span><br><span class="line">    &amp;&amp; cd /usr/share/fonts/windows/ &amp;&amp; chmod 777 * &amp;&amp; mkfontscale &amp;&amp; mkfontdir &amp;&amp; fc-cache</span><br><span class="line">WORKDIR /work/</span><br></pre></td></tr></table></figure>
-<p>这样就制作了一个基于<code>dkarchmervue/moviepy</code> 的带中文字体的镜像。<br>然后直接运行 <code>docker build -t moviepy_cnfonts .</code> 即可创建一个名为 moviepy_cnfonts的镜像。可以把这个镜像替代<code>dkarchmervue/moviepy:latest</code>这个镜像作为运行 python文件的基础镜像。</p>
-<p>运行moviepy官方的结尾特效 end_effect<br><img src="/images/1200357-20190919202017204-216254823.png" alt=""></p>
-
+        
       
 
       
@@ -359,25 +327,7 @@
       
         <h2 id="msgpack介绍"><a href="#msgpack介绍" class="headerlink" title="msgpack介绍"></a>msgpack介绍</h2><p>在阅读sanic相关项目的时候 <a href=""https://github.com/howie6879/Sanic-For-Pythoneer/blob/master/docs/part1/6.%E5%B8%B8%E7%94%A8%E7%9A%84%E6%8A%80%E5%B7%A7.md"">Sanic-For-Pythoneer</a> 阅读代码过程中发现几个比较好用的python库，</p>
 <h3 id="1-cached"><a href="#1-cached" class="headerlink" title="1. cached"></a>1. cached</h3><p>缓存其实应用场景还是比较多的。比如我现在应用的就是对 从database中获取到的数据做缓存，设置ttl(time to live)以减小数据库压力。</p>
-<p>cached的简单应用 （python = 3.7）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import aiocache</span><br><span class="line">from aiocache.serializers import NullSerializer, StringSerializer, \</span><br><span class="line">    PickleSerializer</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@aiocache.cached(ttl=10, serializer=PickleSerializer())</span><br><span class="line">async def get_res():</span><br><span class="line">    print(&quot;get_res(): int(11)&quot;)</span><br><span class="line">    return 11</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    import asyncio</span><br><span class="line"></span><br><span class="line">    loop = asyncio.get_event_loop()</span><br><span class="line">    data = asyncio.run(get_res())</span><br><span class="line">    print(type(data), data)</span><br><span class="line">    data = asyncio.run(get_res())</span><br><span class="line">    print(type(data), data)</span><br></pre></td></tr></table></figure>
-<p>aiocache实现并不复杂。介绍一下 SimpleMemoryCache。大致的思路就是 把数据保存到字典中，key默认为 model_name+ func_name + args + kwargs 组合（可以指定key的值），到了ttl设定的时间就把map中的键值pop出去。<br>其他的也是类似的思路。</p>
-<p>这里值得注意的是 <code>serializer</code>这个参数。如果是使用 <code>SimpleMemoryCache</code>作为缓存，默认是使用 <code>NullSerializer</code>作为序列化工具的，即set的任何内容都可以在get时原样获取，在本地内存中这一点问题没有。<br>如果需要对对象序列化 建议使用 <code>PickleSerializer</code><br><a href=""https://www.zhihu.com/question/38355589"">我是pickle</a></p>
-<p>但是如果使用redis作为缓存，会发生一些预测不到的错误。解决办法是使用：<code>JsonSerializer</code>,内部使用的是 <code>ujson</code>作为序列化工具。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">json module and ujson:</span><br><span class="line">        - ujson dumps supports bytes while json doesn&apos;t</span><br><span class="line">        - ujson and json outputs may differ sometimes</span><br></pre></td></tr></table></figure>
-
-<p>还有一个 <code>MsgPackSerializer</code>,</p>
-<p><code>Transform data to bytes using msgpack.dumps and msgpack.loads to retrieve it back.</code></p>
-<p>还有一个序列化参数，用的比较少，<code>StringSerializer</code>,比如你缓存的是 1，在下次获取缓存结果的时候会给你返回 <code>&#39;1&#39;</code>。</p>
-<h3 id="2-msgpack"><a href="#2-msgpack" class="headerlink" title="2. msgpack"></a>2. msgpack</h3><p>msgpack 是cached包安装时候的依赖。进入源码，发现其对外提供的API非常简单，用法与 ujson,json 等序列/反序列工具基本一直。</p>
-<p>其源码中对外暴露方法做了常规化处理，这样我们用起来很快适应</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># alias for compatibility to simplejson/marshal/pickle.</span><br><span class="line">load = unpack</span><br><span class="line">loads = unpackb</span><br><span class="line"></span><br><span class="line">dump = pack</span><br><span class="line">dumps = packb</span><br></pre></td></tr></table></figure>
-
-<p>msgpack的优势是：msgpack用起来像json，但是却比json快，并且序列化以后的数据长度更小，言外之意，使用msgpack不仅序列化和反序列化的速度快，数据传输量也比json格式小，msgpack同样支持多种语言。</p>
-<p>我们平时主要会用到 <code>loads</code> 等同于 <code>unpackb</code> , <code>dumps</code> 等同于 <code>packb</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;import msgpack</span><br><span class="line">&gt;&gt;&gt;animal = &#123;&quot;color&quot;:&quot;pink&quot;,&quot;name&quot;:&quot;duck&quot;&#125;</span><br><span class="line">&gt;&gt;&gt;msgpack.dumps(animal) // 比 json.dumps(x)的长度更小</span><br><span class="line">b&apos;\x82\xa5color\xa4pink\xa4name\xa4duck&apos;</span><br><span class="line">&gt;&gt;&gt;msgpack.loads(msgpack.dumps(animal))</span><br><span class="line">&#123;b&apos;color&apos;: b&apos;pink&apos;, b&apos;name&apos;: b&apos;duck&apos;&#125;</span><br><span class="line">&gt;&gt;&gt;msgpack.loads(msgpack.dumps(animal),encoding=&quot;utf-8&quot;) // 转会初始状态的字符串，需要加上 encoding这个参数，内部会调用decode()方法</span><br><span class="line">&#123;&apos;color&apos;: &apos;pink&apos;, &apos;name&apos;: &apos;duck&apos;&#125;</span><br></pre></td></tr></table></figure>
-<p>另外 load 和 dump的用法和json.load &amp; json.dump用法相同。<br>该包源码非常简单，有兴趣的可以去看看源码</p>
-
+        
       
 
       
@@ -440,24 +390,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h3 id="不要再用flask-run-部署项目了！"><a href="#不要再用flask-run-部署项目了！" class="headerlink" title="不要再用flask.run()部署项目了！"></a>不要再用flask.run()部署项目了！</h3><p>在维护公司老项目,服务器查看运行着一个flask项目。用简单的单进程跑在机器上。<br>查看详细的信息，发现是直接用这种方式运行的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@app.route(&apos;/&apos;)</span><br><span class="line">def route1():</span><br><span class="line">   pass</span><br><span class="line">   </span><br><span class="line">.....</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    app.run(....)</span><br></pre></td></tr></table></figure>
-
-<dl><dt>这种方式真的很不好，稍微看一下docs就能看到flask已经给了很明显的警高信息</dt><dd><code>WARNING: This is a development server. Do not use it in a production deployment.</code></dd></dl><h3 id="下面就来讲一讲为何不好-："><a href="#下面就来讲一讲为何不好-：" class="headerlink" title="下面就来讲一讲为何不好 ："></a><strong>下面就来讲一讲为何不好</strong> ：</h3><p>你已经构建了Flask网络应用，并正在部署自己选择的VPS上。这是你的第一个小型应用程序，你希望将app.run上的debug设置为False就足够了？也许也启用线程？</p>
-<p>你真的不应该依赖于此。官方文档也不同意。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">While lightweight and easy to use, Flask’s built-in server is </span><br><span class="line">not suitable for production as it doesn’t scale well </span><br><span class="line">and by default serves only one request at a time.</span><br></pre></td></tr></table></figure>
-
-<p>现在怎么办？好吧，不要混为一谈。一切都很好，你只需要了解Flask部署Web服务器的用途，缺少的什么以及拿什么东西顶上就好了。</p>
-<h4 id="Flask的内置Web服务器"><a href="#Flask的内置Web服务器" class="headerlink" title="Flask的内置Web服务器"></a>Flask的内置Web服务器</h4><p>Flask提供的内置 Web服务器是为了方便开发。</p>
-<p>有了它，你就可以在本地计算机上访问你的应用程序，而无需开启其他服务并让它们协调工作。但是，它只能一次由一个人使用，<br>它就是以这种方式构建的–<strong>就是为了方便你开发</strong>。它也可以提供静态文件，但是与为快速处理文件而设计的工具(如nginx)相比，<br>这样做的速度非常慢。当只有一个人访问它时，这无关紧要，只要达到开发调试的目的就可以了。</p>
-<p>在生产环境中运行Web应用程序时，我们希望它能够处理多个用户的过个请求，而那些使用我们服务的人不必为加载页面和静态文件焦急等待。</p>
-<h4 id="生产栈结构"><a href="#生产栈结构" class="headerlink" title="生产栈结构"></a>生产栈结构</h4><p>生产环境的设置通常由多个组件组成，每个组件的设计和构建都非常擅长于同一件事–快速，可靠，专注。</p>
-<p>就像内置Web服务器一样，与整个设备的通信都是通过HTTP进行的。一个请求进入并到达第一个组件-专用的Web服务器。<br>它非常适合从磁盘读取静态文件（例如，你的css，js文件）并处理多个请求。当请求不是静态文件时，<br>所有请求都将传递到堆栈中。</p>
-<p>应用程序服务器获取这些的请求，并将这些请求中的信息转换为框架可以使用的Python对象-WSGI。</p>
-<p>Flask应用实际上并未像我们想象的作为服务器等待请求并对它们做出反应。<br>而是可以被认为是被应用服务器作为方法调用，提供请求对象。</p>
-<p>然后，应用程序服务器将运行应用程序的输出打包到HTTP响应中，并传递回Web服务器，再传递回给用户。</p>
-<p>意思是<br>如果要在生产环境中运行Flask，请确保使用可用于生产环境的Web服务器，例如Nginx，并让你的应用程序由WSGI应用程序服务器（例如Gunicorn）处理。</p>
-<p>完毕！</p>
-
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@app.route(&apos;/&apos;)</span><br><span class="line">def route1():</span><br><span class="line">   pass</span><br><span class="line">   ...</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    app.run(....)</span><br></pre></td></tr></table></figure>
+        
       
 
       
@@ -549,11 +483,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="flask应用上下文和请求上下文"><a href="#flask应用上下文和请求上下文" class="headerlink" title="flask应用上下文和请求上下文"></a>flask应用上下文和请求上下文</h2><p>虽然现在已经是python3的时代，一些开发库已经不支持python2并且asyncio也越来越多的被应用。<br>但是个人感觉如果要解决高并发问题，使用asyncio并不是很好的实践。因为协程之间并不是简单的调用切换，还涉及到一些协程间通信。<br>使用python还是以‘顺序’编程为主，如果公司对高并发真的是有急迫的需求，更好的选择应该是<code>golang</code></p>
-<p>与<code>flask</code>对应的异步web框架是<code>sanic</code>。两者的编程风格很相似，包括核心app的构建方法，路由等。<br><code>sanic</code>是基于asyncio的事件回调机制来完成的，与tornado（老版的tornado是基于yield实现的类似于协程的切换）相比，性能及可读性更高一些。</p>
-<p>我个人实际开发中对并发并没有很高的要求，所以应用最多的还是flask，原因很简单-需求驱动。</p>
-<p>简单整理了flask的应用上下文和请求上下文的处理过程。<br><img src="/images/flask.png" alt=""></p>
-
+        <h2 id="flask应用上下文和请求上下文"><a href="#flask应用上下文和请求上下文" class="headerlink" title="flask应用上下文和请求上下文"></a>flask应用上下文和请求上下文</h2><p>虽然现在已经是python3的时代，一些开发库已经不支持python2并且asyncio也越来越多的被应用。<br>但是个人感觉如果要解决高并发问题，使用asyncio并不是很好的实践。</p>
+        
       
 
       
@@ -789,6 +720,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color4">elasticsearch</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">转载</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color2">python</a>
               </li>
              
@@ -802,14 +741,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color1">python,flask,随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color4">elasticsearch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">转载</a>
               </li>
              
               <li class="article-tag-list-item">
