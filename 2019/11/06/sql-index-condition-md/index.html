@@ -21,15 +21,15 @@
     
     
     <meta name="keywords" content="数据库">
-    <meta name="description" content="##数据库优化设计方法初探 随着数据库技术的发展，人们越来越依赖于计算机化的业务数据。但由于传统的基于文件的数据存储和检索方法不灵活且难于管理，因而数据库优化设计成为人们关注的问题。如何有效地组织和处理大型数据库的海量数据，使得人们能方便、准确、快捷地完成对数据的存取操作，成为对数据库的建设及使用的瓶颈。 运行速度及执行效率是衡量数据库系统性能的重要标准，为了保证系统性能和吞吐量，需要对数据库的逻">
+    <meta name="description" content="数据库优化设计方法初探随着数据库技术的发展，人们越来越依赖于计算机化的业务数据。但由于传统的基于文件的数据存储和检索方法不灵活且难于管理，因而数据库优化设计成为人们关注的问题。如何有效地组织和处理大型数据库的海量数据，使得人们能方便、准确、快捷地完成对数据的存取操作，成为对数据库的建设及使用的瓶颈。 运行速度及执行效率是衡量数据库系统性能的重要标准，为了保证系统性能和吞吐量，需要对数据库的逻辑设计">
 <meta name="keywords" content="数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据库优化设计方法初探">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;06&#x2F;sql-index-condition-md&#x2F;index.html">
 <meta property="og:site_name" content="SHERPA-ZARIC">
-<meta property="og:description" content="##数据库优化设计方法初探 随着数据库技术的发展，人们越来越依赖于计算机化的业务数据。但由于传统的基于文件的数据存储和检索方法不灵活且难于管理，因而数据库优化设计成为人们关注的问题。如何有效地组织和处理大型数据库的海量数据，使得人们能方便、准确、快捷地完成对数据的存取操作，成为对数据库的建设及使用的瓶颈。 运行速度及执行效率是衡量数据库系统性能的重要标准，为了保证系统性能和吞吐量，需要对数据库的逻">
+<meta property="og:description" content="数据库优化设计方法初探随着数据库技术的发展，人们越来越依赖于计算机化的业务数据。但由于传统的基于文件的数据存储和检索方法不灵活且难于管理，因而数据库优化设计成为人们关注的问题。如何有效地组织和处理大型数据库的海量数据，使得人们能方便、准确、快捷地完成对数据的存取操作，成为对数据库的建设及使用的瓶颈。 运行速度及执行效率是衡量数据库系统性能的重要标准，为了保证系统性能和吞吐量，需要对数据库的逻辑设计">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-06T14:58:47.109Z">
+<meta property="og:updated_time" content="2019-11-06T15:02:12.502Z">
 <meta name="twitter:card" content="summary">
     
         <link rel="alternate" type="application/atom+xml" title="SHERPA-ZARIC" href="/atom.xml">
@@ -139,7 +139,7 @@
         <h1 class="title">数据库优化设计方法初探</h1>
         <h5 class="subtitle">
             
-                <time datetime="2019-11-06T14:58:47.108Z" itemprop="datePublished" class="page-time">
+                <time datetime="2019-11-06T15:02:12.502Z" itemprop="datePublished" class="page-time">
   2019-11-06
 </time>
 
@@ -161,7 +161,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3查询优化"><span class="post-toc-number">1.</span> <span class="post-toc-text">3查询优化</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1-使用单列索引。"><span class="post-toc-number">1.0.1.</span> <span class="post-toc-text">(1)使用单列索引。</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3．2采用嵌套查询"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">3．2采用嵌套查询</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3．4尽早消掉不满足条件的记录"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">3．4尽早消掉不满足条件的记录</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3．6避免困难的正规表达式"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">3．6避免困难的正规表达式</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4表的优化"><span class="post-toc-number">2.</span> <span class="post-toc-text">4表的优化</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#5结束语"><span class="post-toc-number">3.</span> <span class="post-toc-text">5结束语</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数据库优化设计方法初探"><span class="post-toc-number">1.</span> <span class="post-toc-text">数据库优化设计方法初探</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1范式优化"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">1范式优化</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#索引优化"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">索引优化</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3查询优化"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">3查询优化</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3．1在条件子旬中使用索引"><span class="post-toc-number">1.3.1.</span> <span class="post-toc-text">3．1在条件子旬中使用索引</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1-使用单列索引。"><span class="post-toc-number">1.3.1.1.</span> <span class="post-toc-text">(1)使用单列索引。</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#2-使用复合索引时，必须保证在条件子句中首先使用复合索引的第一列。"><span class="post-toc-number">1.3.1.2.</span> <span class="post-toc-text">(2)使用复合索引时，必须保证在条件子句中首先使用复合索引的第一列。</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3．2采用嵌套查询"><span class="post-toc-number">1.3.2.</span> <span class="post-toc-text">3．2采用嵌套查询</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3．3尽早执行选择操作"><span class="post-toc-number">1.3.3.</span> <span class="post-toc-text">3．3尽早执行选择操作</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3．4尽早消掉不满足条件的记录"><span class="post-toc-number">1.3.4.</span> <span class="post-toc-text">3．4尽早消掉不满足条件的记录</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3．6避免困难的正规表达式"><span class="post-toc-number">1.3.5.</span> <span class="post-toc-text">3．6避免困难的正规表达式</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4表的优化"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">4表的优化</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#5结束语"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">5结束语</span></a></li></ol></li></ol>
         </nav>
     </aside>
 
@@ -172,7 +172,7 @@
     <div class="post-card">
         <h1 class="post-card-title">数据库优化设计方法初探</h1>
         <div class="post-meta">
-            <time class="post-time" title="2019-11-06 22:58:47" datetime="2019-11-06T14:58:47.108Z"  itemprop="datePublished">2019-11-06</time>
+            <time class="post-time" title="2019-11-06 23:02:12" datetime="2019-11-06T15:02:12.502Z"  itemprop="datePublished">2019-11-06</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/%E5%90%8E%E7%AB%AF/">后端</a></li></ul>
@@ -187,12 +187,10 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>##数据库优化设计方法初探</p>
-<p>随着数据库技术的发展，人们越来越依赖于计<br>算机化的业务数据。但由于传统的基于文件的数据<br>存储和检索方法不灵活且难于管理，因而数据库优<br>化设计成为人们关注的问题。如何有效地组织和处<br>理大型数据库的海量数据，使得人们能方便、准确、<br>快捷地完成对数据的存取操作，成为对数据库的建<br>设及使用的瓶颈。</p>
+            <h2 id="数据库优化设计方法初探"><a href="#数据库优化设计方法初探" class="headerlink" title="数据库优化设计方法初探"></a>数据库优化设计方法初探</h2><p>随着数据库技术的发展，人们越来越依赖于计<br>算机化的业务数据。但由于传统的基于文件的数据<br>存储和检索方法不灵活且难于管理，因而数据库优<br>化设计成为人们关注的问题。如何有效地组织和处<br>理大型数据库的海量数据，使得人们能方便、准确、<br>快捷地完成对数据的存取操作，成为对数据库的建<br>设及使用的瓶颈。</p>
 <p>运行速度及执行效率是衡量数据库系统性能的<br>重要标准，为了保证系统性能和吞吐量，需要对数据<br>库的逻辑设计和物理设计进行优化，并贯穿于数据库设计的始终，这就是数据库优化设计的首要任务。<br>本文从范式优化、索引优化、表的优化及查询优化四<br>个方面探讨数据库优化设计的方法，并对它们的综<br>合使用进行分析。</p>
-<p>###1范式优化</p>
-<p>数据库逻辑设计的结果不是惟一的，好的关系<br>模式通常需要满足2个条件：正确表达数据语义和<br>避免数据冗余、异常及不一致问题的出现。设计过程<br>中，要从这2个基本条件出发，不要顾此失彼，这样<br>才能在提高数据库性能的同时保证数据库的正确<br>性。<br>将模式的范式作为评价关系模式优劣的标准具<br>有一定的科学性。通常一个关系模式达到BCNF或<br>3NF时，被认为具有较好的性能。当某关系模式达到BCNF时，可以有效消除数据冗余和异常现象，<br>但有时不一定保持原关系模式的函数依赖关系，破<br>坏了数据语义。因此在设计时应统筹兼顾，先尽可能<br>设计成BCNF模式集，若此时达不到保持函数依赖<br>的特点，则降低范式要求，改成3NF模式集，以保证<br>模式集正确地表达数据语义。</p>
-<p>###索引优化<br>索引是数据库中重要的数据结构，它的根本目<br>的是为了提高查询效率，改善系统性能。但对索引的<br>存储和维护操作的同时会给系统的空间和时间上带<br>来一些负面影响，牺牲一定的系统性能。因此设计时<br>应尽量选择有用的索引，在提高查询速度和节省存<br>储空间之间寻求最佳的平衡点：</p>
+<h3 id="1范式优化"><a href="#1范式优化" class="headerlink" title="1范式优化"></a>1范式优化</h3><p>数据库逻辑设计的结果不是惟一的，好的关系<br>模式通常需要满足2个条件：正确表达数据语义和<br>避免数据冗余、异常及不一致问题的出现。设计过程<br>中，要从这2个基本条件出发，不要顾此失彼，这样<br>才能在提高数据库性能的同时保证数据库的正确<br>性。<br>将模式的范式作为评价关系模式优劣的标准具<br>有一定的科学性。通常一个关系模式达到BCNF或<br>3NF时，被认为具有较好的性能。当某关系模式达到BCNF时，可以有效消除数据冗余和异常现象，<br>但有时不一定保持原关系模式的函数依赖关系，破<br>坏了数据语义。因此在设计时应统筹兼顾，先尽可能<br>设计成BCNF模式集，若此时达不到保持函数依赖<br>的特点，则降低范式要求，改成3NF模式集，以保证<br>模式集正确地表达数据语义。</p>
+<h3 id="索引优化"><a href="#索引优化" class="headerlink" title="索引优化"></a>索引优化</h3><p>索引是数据库中重要的数据结构，它的根本目<br>的是为了提高查询效率，改善系统性能。但对索引的<br>存储和维护操作的同时会给系统的空间和时间上带<br>来一些负面影响，牺牲一定的系统性能。因此设计时<br>应尽量选择有用的索引，在提高查询速度和节省存<br>储空间之间寻求最佳的平衡点：</p>
 <p>(1)在大型关系数据库中，若处理的关系表较<br>小，则无需建立索引。因为数据量较小时，直接扫描<br>便可很快遍历整个表，建立索引反而会加重系统负<br>担。</p>
 <p>(2)如果数据的更新比较频繁，维护索引所付出<br>的代价则很大，若这种代价超出了查询上所获得的<br>好处，此时索引不可取。</p>
 <p>(3)选择合适的列建立索引对平衡索引的正负<br>面影响有重要作用。通常在有如下特性的数据列建<br>立索引：</p>
@@ -209,11 +207,10 @@
 <pre><code>(1)学生登记表S(学号SN0，姓名SNAME，年龄AGE，性别SEX，院系SDEPT)；
 (2)学习登记表SC(学号SNO ，课程号CN0，成绩GRADE)；
 (3)课程登记表C(课程号CN()，课程名</code></pre><p>CNAME，开课院系CDEPT，教师TNAME)。</p>
-<p>####3．1在条件子旬中使用索引</p>
-<p>正确使用索引可以大大提高查询效率，在条件<br>子句中应尽量考虑以下有用索引的使用。</p>
+<h4 id="3．1在条件子旬中使用索引"><a href="#3．1在条件子旬中使用索引" class="headerlink" title="3．1在条件子旬中使用索引"></a>3．1在条件子旬中使用索引</h4><p>正确使用索引可以大大提高查询效率，在条件<br>子句中应尽量考虑以下有用索引的使用。</p>
 <h5 id="1-使用单列索引。"><a href="#1-使用单列索引。" class="headerlink" title="(1)使用单列索引。"></a>(1)使用单列索引。</h5><p>例如，在学生登记表中，如果创建学号为单列索<br>引，那么下列查询语句的 WHERE 子句中应使用学<br>号这个索引，使之成为有用索引。如果使用了其他字<br>段，创建学号这个索引则为无用索引：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT  SNO ，SNAME，SEX</span><br><span class="line">FR0M S</span><br><span class="line"> WHERE  SNO =’S1’</span><br></pre></td></tr></table></figure>
-<p>#####(2)使用复合索引时，必须保证在条件子句中首先使用复合索引的第一列。<br>例如，在学习登记表中，如果创建学号和课程号<br>为复合索引，下列查询中复合索引的使用是有用的，<br>因为SN0是复合索引的第一列字段：</p>
+<h5 id="2-使用复合索引时，必须保证在条件子句中首先使用复合索引的第一列。"><a href="#2-使用复合索引时，必须保证在条件子句中首先使用复合索引的第一列。" class="headerlink" title="(2)使用复合索引时，必须保证在条件子句中首先使用复合索引的第一列。"></a>(2)使用复合索引时，必须保证在条件子句中首先使用复合索引的第一列。</h5><p>例如，在学习登记表中，如果创建学号和课程号<br>为复合索引，下列查询中复合索引的使用是有用的，<br>因为SN0是复合索引的第一列字段：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT SN0．GRADE</span><br><span class="line">FR0MSC</span><br><span class="line"> WHERE SNO =’S3’AND CNO =’C1’</span><br></pre></td></tr></table></figure>
 
 <p>但是，下列复合索引的使用是没用的，系统仍然<br>采用顺序扫描方式：</p>
@@ -228,7 +225,7 @@
 <p>由于查询1采用联接查询，只有学号和姓名为<br>输出属性，但几乎所有届性都要参加选择、联接运<br>算，多余的属性占用了较大的内存空间；另外3个表<br>的笛卡尔积将产生大量的中间结果，使选择操作时<br>需处理大量数目的元组。</p>
 <p>查询2采用子查询，投影和选择运算同时进行，<br>对C表进行扫描选择后，仅剩下少量满足条件的元<br>组，接着投影操作将其它属性统统剔除，只保留“课<br>程号”一个属性，这样产生一个元组数目和属性数目<br>都较小的中间结果，大大减少了其外层对SC表查<br>询时的比较次数；同理，对SC表的扫描结果又减少<br>了其外层对S表查询时的比较次数。从而提高了检<br>索效率。</p>
 <p>这里需要指出的是，使用嵌套查询时，要避免采<br>用相关子查询。即子查询中查询条件依赖于外层查<br>询中的某个值，当主查询中的列值改变之后，子查询<br>必须重新查询一次，查询嵌套层次越多，效率越低，<br>比联接查询的效率更低。</p>
-<p>####3．3尽早执行选择操作<br>尽可能早地执行选择操作，以减少运算量。例<br>如，检索选修课程名为“高数”的学生的学号和姓名。<br>查询1：</p>
+<h4 id="3．3尽早执行选择操作"><a href="#3．3尽早执行选择操作" class="headerlink" title="3．3尽早执行选择操作"></a>3．3尽早执行选择操作</h4><p>尽可能早地执行选择操作，以减少运算量。例<br>如，检索选修课程名为“高数”的学生的学号和姓名。<br>查询1：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT S.SNO ，S.SNAME</span><br><span class="line">FROM S，C，SC</span><br><span class="line"> WHERE C.CNO =SC.CNO AND SC．SNO =S．SNO AND CNAME=’高数’</span><br></pre></td></tr></table></figure>
 
 <p>查询2：</p>
