@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>python_variable_scope | SHERPA-ZARIC | 在神秘的珠穆朗玛峰，有一个为世界各国登山队充当向导与挑夫的族群——夏尔巴人 （SHERPA）</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="Python中的变量范围 关于变量的讨论虽然有很多博客，但是感觉大多数都没有深度，浅尝辄止。推荐一本书《流畅的python》在第八章，对 对象的引用、可变性和垃圾回收有很详细和深度的讲解。我在这里也通过搜索的一些文章和这本书的内容谈谈自己的见解，顺便也做一下笔记。  如果您熟悉Python或任何其他编程语言，你肯定会知道必须先定义变量，然后才能在程序中使用它们。根据定义的方式和位置，必须以不同的方">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python_variable_scope">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;06&#x2F;python_variable_scope&#x2F;index.html">
+<meta property="og:site_name" content="SHERPA-ZARIC">
+<meta property="og:description" content="Python中的变量范围 关于变量的讨论虽然有很多博客，但是感觉大多数都没有深度，浅尝辄止。推荐一本书《流畅的python》在第八章，对 对象的引用、可变性和垃圾回收有很详细和深度的讲解。我在这里也通过搜索的一些文章和这本书的内容谈谈自己的见解，顺便也做一下笔记。  如果您熟悉Python或任何其他编程语言，你肯定会知道必须先定义变量，然后才能在程序中使用它们。根据定义的方式和位置，必须以不同的方">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-06T15:43:26.398Z">
+<meta name="twitter:card" content="summary">
+    
+        <link rel="alternate" type="application/atom+xml" title="SHERPA-ZARIC" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/images/go.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">ZARIC</h5>
+          <a href="mailto:zarichub@gmail.com" target="_blank" rel="noopener" title="zarichub@gmail.com" class="mail">zarichub@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">python_variable_scope</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">python_variable_scope</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-11-06T15:43:26.398Z" itemprop="datePublished" class="page-time">
+  2019-11-06
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Python中的变量范围"><span class="post-toc-number">1.</span> <span class="post-toc-text">Python中的变量范围</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#到底是什么变量？"><span class="post-toc-number">2.</span> <span class="post-toc-text">到底是什么变量？</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-python_variable_scope"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">python_variable_scope</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-11-06 23:43:26" datetime="2019-11-06T15:43:26.398Z"  itemprop="datePublished">2019-11-06</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="Python中的变量范围"><a href="#Python中的变量范围" class="headerlink" title="Python中的变量范围"></a>Python中的变量范围</h2><blockquote>
+<p>关于变量的讨论虽然有很多博客，但是感觉大多数都没有深度，浅尝辄止。推荐一本书《流畅的python》<br>在第八章，对 对象的引用、可变性和垃圾回收有很详细和深度的讲解。我在这里也通过搜索的一些文章和这本书的<br>内容谈谈自己的见解，顺便也做一下笔记。</p>
+</blockquote>
+<p>如果您熟悉Python或任何其他编程语言，<br>你肯定会知道必须先定义变量，然后才能在程序中使用它们。<br>根据定义的方式和位置，必须以不同的方式访问变量。<br>有些变量是全局定义的，有些是局部定义的。<br>这意味着引用程序某个部分中的实体的变量，可能引用程序另一部分中的不同内容。</p>
+<h2 id="到底是什么变量？"><a href="#到底是什么变量？" class="headerlink" title="到底是什么变量？"></a>到底是什么变量？</h2><p>要了解变量的范围，重要的是首先了解什么是变量。本质上，它们是内存中对象的引用或指针。将变量分配给=实例时，<br>就是将变量绑定（或映射）到该实例。<br>可以将多个变量绑定到同一实例。<br>Python使用名称空间跟踪所有这些映射。<br>这些是用于将变量名映射到对象的容器。你可以将它们视为包含name:object映射的字典。<br>可以通过选择分配给它们的名称访问对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = 5</span><br><span class="line">b = a</span><br><span class="line">a = 3</span><br></pre></td></tr></table></figure>
+<p>在上面得实例中，a首先绑定到整数5。在这种情况下，a是变量名，整数5是对象<br>然后b设置为a。这实际上意味着b现在绑定到与a相同得整数值5.</p>
+<p>如果随后把a改为4，有过这样经历得同学可能会认为b也会是3</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; a = b = [1,2,3]</span><br><span class="line">&gt;&gt;&gt; a[1] = 0</span><br><span class="line">&gt;&gt;&gt; b</span><br><span class="line">[1, 0, 3]</span><br></pre></td></tr></table></figure>
+<p>值得注意的是 字符串、字节、和数字 等单一型序列是扁平的，它们保存的<br>不是引用，而是在链序的内存中保存数据本身。</p>
+<p>未完待续….</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+
+        
+        文章链接:<a href="/2019/11/06/python_variable_scope/" target="_blank" rel="external">http://yoursite.com/2019/11/06/python_variable_scope/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="http://yoursite.com">
+            <img src="/images/go.jpg" alt="ZARIC">
+            ZARIC
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+
+            
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/11/06/sql-index-condition-md/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">数据库优化设计方法初探</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        <span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>ZARIC &copy; 2015 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" target="_blank" rel="noopener" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: false, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'ZaricHub loading...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'ZaricHub';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
