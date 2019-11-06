@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-11-04T17:15:57.589Z</updated>
+  <updated>2019-11-06T14:58:47.109Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,56 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>数据库优化设计方法初探</title>
+    <link href="http://yoursite.com/2019/11/06/sql-index-condition-md/"/>
+    <id>http://yoursite.com/2019/11/06/sql-index-condition-md/</id>
+    <published>2019-11-06T14:58:47.108Z</published>
+    <updated>2019-11-06T14:58:47.109Z</updated>
+    
+    <content type="html"><![CDATA[<p>##数据库优化设计方法初探</p><p>随着数据库技术的发展，人们越来越依赖于计<br>算机化的业务数据。但由于传统的基于文件的数据<br>存储和检索方法不灵活且难于管理，因而数据库优<br>化设计成为人们关注的问题。如何有效地组织和处<br>理大型数据库的海量数据，使得人们能方便、准确、<br>快捷地完成对数据的存取操作，成为对数据库的建<br>设及使用的瓶颈。</p><p>运行速度及执行效率是衡量数据库系统性能的<br>重要标准，为了保证系统性能和吞吐量，需要对数据<br>库的逻辑设计和物理设计进行优化，并贯穿于数据库设计的始终，这就是数据库优化设计的首要任务。<br>本文从范式优化、索引优化、表的优化及查询优化四<br>个方面探讨数据库优化设计的方法，并对它们的综<br>合使用进行分析。</p><p>###1范式优化</p><p>数据库逻辑设计的结果不是惟一的，好的关系<br>模式通常需要满足2个条件：正确表达数据语义和<br>避免数据冗余、异常及不一致问题的出现。设计过程<br>中，要从这2个基本条件出发，不要顾此失彼，这样<br>才能在提高数据库性能的同时保证数据库的正确<br>性。<br>将模式的范式作为评价关系模式优劣的标准具<br>有一定的科学性。通常一个关系模式达到BCNF或<br>3NF时，被认为具有较好的性能。当某关系模式达到BCNF时，可以有效消除数据冗余和异常现象，<br>但有时不一定保持原关系模式的函数依赖关系，破<br>坏了数据语义。因此在设计时应统筹兼顾，先尽可能<br>设计成BCNF模式集，若此时达不到保持函数依赖<br>的特点，则降低范式要求，改成3NF模式集，以保证<br>模式集正确地表达数据语义。</p><p>###索引优化<br>索引是数据库中重要的数据结构，它的根本目<br>的是为了提高查询效率，改善系统性能。但对索引的<br>存储和维护操作的同时会给系统的空间和时间上带<br>来一些负面影响，牺牲一定的系统性能。因此设计时<br>应尽量选择有用的索引，在提高查询速度和节省存<br>储空间之间寻求最佳的平衡点：</p><p>(1)在大型关系数据库中，若处理的关系表较<br>小，则无需建立索引。因为数据量较小时，直接扫描<br>便可很快遍历整个表，建立索引反而会加重系统负<br>担。</p><p>(2)如果数据的更新比较频繁，维护索引所付出<br>的代价则很大，若这种代价超出了查询上所获得的<br>好处，此时索引不可取。</p><p>(3)选择合适的列建立索引对平衡索引的正负<br>面影响有重要作用。通常在有如下特性的数据列建<br>立索引：</p><pre><code>①定义有主键和外键的数据列；②需要在指定范围中快速或频繁查询的列；③需要按排序顺序快速或频繁检索的列；④在集合过程中需要快速或频繁组合到一起的列。</code></pre><p>如有下列情况时则不考虑创建索引L2]：</p><pre><code>①在查询中几乎不涉及的列；②不同值少的列，比如在学生表的“性别”列上只有“男”与“女”2个不同值，就无必要建立索引；③由文本、图像等数据类型定义的列。</code></pre><p>(4)索引分为聚集索引和非聚集索引，建立索引时，应考虑对两者的选择：</p><pre><code>①经常作为查询结果排序条件的字段应建为聚集索引。例如查询结果要对年龄排序，可在年龄字段上建立聚集索引；②当以某字段为查询条件，需要回传局部范围的大量数据时，应在此字段上建立聚集索引，而当查询所获得的数据量较少时，有必要在此字段上建立非聚集索引。例如回传某个时间段之间的数据，可考虑在日期字段上建聚集索引；③应在内容重复性较大的字段上建立聚集索引，而当某字段的数据惟一性较高时，有必要建立非聚集索引。例如学生的成绩重复性较大，可考虑在成绩字段上建立聚集索引对索引列和索引类型的选择没有绝对的界限，在实际应用中，要综合各要素点具体分析，以达到系统的性能综合最优。</code></pre><h3 id="3查询优化"><a href="#3查询优化" class="headerlink" title="3查询优化"></a>3查询优化</h3><p>在数据库的所有操作中，查询操作占有很大的<br>比例，查询速度的快慢直接影响到应用系统的生命<br>力，因此设计较为优化的查询语句对提高数据库的<br>整体性能有着重要的作用。实践证明，在许多情况下<br>均可找到语义等价的查询，而选择不同的查询语句<br>对查询效率的影响大不相同，尤其是在一些大规模<br>的关系数据库应用系统中更加明显。本文以应用实<br>例为基础，结合数据库理论，探讨查询优化技术在现<br>实系统中的运用。<br>设在某学生管理系统中有如下3个关系：</p><pre><code>(1)学生登记表S(学号SN0，姓名SNAME，年龄AGE，性别SEX，院系SDEPT)；(2)学习登记表SC(学号SNO ，课程号CN0，成绩GRADE)；(3)课程登记表C(课程号CN()，课程名</code></pre><p>CNAME，开课院系CDEPT，教师TNAME)。</p><p>####3．1在条件子旬中使用索引</p><p>正确使用索引可以大大提高查询效率，在条件<br>子句中应尽量考虑以下有用索引的使用。</p><h5 id="1-使用单列索引。"><a href="#1-使用单列索引。" class="headerlink" title="(1)使用单列索引。"></a>(1)使用单列索引。</h5><p>例如，在学生登记表中，如果创建学号为单列索<br>引，那么下列查询语句的 WHERE 子句中应使用学<br>号这个索引，使之成为有用索引。如果使用了其他字<br>段，创建学号这个索引则为无用索引：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT  SNO ，SNAME，SEX</span><br><span class="line">FR0M S</span><br><span class="line"> WHERE  SNO =’S1’</span><br></pre></td></tr></table></figure><p>#####(2)使用复合索引时，必须保证在条件子句中首先使用复合索引的第一列。<br>例如，在学习登记表中，如果创建学号和课程号<br>为复合索引，下列查询中复合索引的使用是有用的，<br>因为SN0是复合索引的第一列字段：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT SN0．GRADE</span><br><span class="line">FR0MSC</span><br><span class="line"> WHERE SNO =’S3’AND CNO =’C1’</span><br></pre></td></tr></table></figure><p>但是，下列复合索引的使用是没用的，系统仍然<br>采用顺序扫描方式：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT  SN0，GRADE</span><br><span class="line">FR0M SC</span><br><span class="line"> WHERE  CNO =’C1’ AND SNO =’S3’</span><br></pre></td></tr></table></figure><h4 id="3．2采用嵌套查询"><a href="#3．2采用嵌套查询" class="headerlink" title="3．2采用嵌套查询"></a>3．2采用嵌套查询</h4><p>嵌套查询(子查询)是指在 WHERE 或<br>HAVING条件子句中又包含了另一个SELECT 查<br>询语句的查询。执行时先执行最内层的子查询，再由<br>内到外逐层进行，通过子查询的层层选择、投影，中<br>间结果元组及属性的数目都得到有效的缩减，使条<br>件判断时的扫描工作仅限于较小范围内，提高检索<br>效率。嵌套查询比联接查询效率要高。</p><p>例如，查询选修课程名为“数据库原理”的学生<br>学号和姓名。</p><p>查询1：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT SNO ，SNAME FROM  C，SC，S</span><br><span class="line"> WHERE  CNAME=’数据库原理’AND C．</span><br><span class="line">CNO =SC．CNO </span><br><span class="line">AND SC．SNO =S．SNO</span><br></pre></td></tr></table></figure><p>查询2：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT SNO ，SNAME FROM  S</span><br><span class="line"> WHERE  SN0 IN</span><br><span class="line">(SELECT SNO  FROM  SC  WHERE  CNO  IN</span><br><span class="line">(SELECT CNO  FROM  C  WHERE  CNAME=</span><br><span class="line">’数据库原理’))</span><br></pre></td></tr></table></figure><p>由于查询1采用联接查询，只有学号和姓名为<br>输出属性，但几乎所有届性都要参加选择、联接运<br>算，多余的属性占用了较大的内存空间；另外3个表<br>的笛卡尔积将产生大量的中间结果，使选择操作时<br>需处理大量数目的元组。</p><p>查询2采用子查询，投影和选择运算同时进行，<br>对C表进行扫描选择后，仅剩下少量满足条件的元<br>组，接着投影操作将其它属性统统剔除，只保留“课<br>程号”一个属性，这样产生一个元组数目和属性数目<br>都较小的中间结果，大大减少了其外层对SC表查<br>询时的比较次数；同理，对SC表的扫描结果又减少<br>了其外层对S表查询时的比较次数。从而提高了检<br>索效率。</p><p>这里需要指出的是，使用嵌套查询时，要避免采<br>用相关子查询。即子查询中查询条件依赖于外层查<br>询中的某个值，当主查询中的列值改变之后，子查询<br>必须重新查询一次，查询嵌套层次越多，效率越低，<br>比联接查询的效率更低。</p><p>####3．3尽早执行选择操作<br>尽可能早地执行选择操作，以减少运算量。例<br>如，检索选修课程名为“高数”的学生的学号和姓名。<br>查询1：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT S.SNO ，S.SNAME</span><br><span class="line">FROM S，C，SC</span><br><span class="line"> WHERE C.CNO =SC.CNO AND SC．SNO =S．SNO AND CNAME=’高数’</span><br></pre></td></tr></table></figure><p>查询2：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT S.SNO ，S.SNAME</span><br><span class="line">FROM S，C，SC</span><br><span class="line"> WHERE CNAME=’高数’AND C.CNO </span><br><span class="line">=SC.CNO AND SC.SNO =S.SNO</span><br></pre></td></tr></table></figure><p>执行这两条查询语句时，在对表S、C和SC笛<br>卡尔积的中间结果筛选时，查询2执行的比较次数<br>较查询1要少，因为其首先利用是否选修高数这一<br>条件排除了大量的元组，只有满足此条件的元组才<br>需要进行课程号和学号的相等判断。</p><h4 id="3．4尽早消掉不满足条件的记录"><a href="#3．4尽早消掉不满足条件的记录" class="headerlink" title="3．4尽早消掉不满足条件的记录"></a>3．4尽早消掉不满足条件的记录</h4><p>having子句中的限制条件应尽量多地放人<br> WHERE 子句中，以尽早把不满足条件的记录消掉。</p><p>例如，分别统计选修C1和C2课程的学生人<br>数，当选修超过50人时，显示学生的学号。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT SNO FROM SC</span><br><span class="line">GROUP BY CN0</span><br><span class="line">HAVING(CNO =’C1’ OR CNO =’C2’) AND</span><br><span class="line">C0UNT(*)&gt;50</span><br></pre></td></tr></table></figure><p>应改为：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT SNO FROM SC</span><br><span class="line"> WHERE CNO =’C1’ OR CNO =’C2’</span><br><span class="line">GROUPBY CNO </span><br><span class="line">HAVING COUNT(*)&gt;50</span><br></pre></td></tr></table></figure><p>3．5分组计数<br>例如，找出选修全部课程的学生姓名。<br>查询1：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT SNAME FROM S</span><br><span class="line"> WHERE NOT EXISTS</span><br><span class="line">(SELECT*FROM C WHERE NOT</span><br><span class="line">EXESTS</span><br><span class="line">(SELECT * FROM SC WHERE S.SNO =</span><br><span class="line">SC．SNO ANDC．CNO =SC.CNO ))</span><br></pre></td></tr></table></figure><p>查询2：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT SNAME FROM S WHERE SNO </span><br><span class="line">IN</span><br><span class="line">(SELECT DISTINCTS NO FROM SC</span><br><span class="line">GROUPBY SNO </span><br><span class="line">HAVING COUNT(CNO )=(SELECT</span><br><span class="line">COUNT(CNO )FROM C))</span><br></pre></td></tr></table></figure><p>由于全部课程构成1个集合，如果成绩登记表<br>按学号分组，只要比较每个学生选修的课程集合是<br>否与全部课程构成的集合相等，即可判断某学生是<br>否选修了全部课程。可以证明，对于有引用关系的集<br>合而言，集合中元素数目相等则集合相同，因此查询<br>条件中若某学生选的课程数目等于课程表的记录总<br>数时，表示该同学选修了全部课程。查询2较查询1<br>效率较高。</p><h4 id="3．6避免困难的正规表达式"><a href="#3．6避免困难的正规表达式" class="headerlink" title="3．6避免困难的正规表达式"></a>3．6避免困难的正规表达式</h4><p>正规表达式即为使用IIKE等关键字支持通配<br>符匹配，但这种匹配特别耗费时间。例如，从学生登<br>记表中选出以‘2000’为前缀的学号的学生。<br>查询1：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT *FROM S  WHERE SNO LIKE</span><br><span class="line">’2000</span><br></pre></td></tr></table></figure><p>一<br>’<br>查询2：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT *FROM S WHERE (SNO &gt;</span><br><span class="line">’2000000’)AND(SNO &lt;’2001000’)</span><br></pre></td></tr></table></figure><p>对于这两种查询，既使在学号字段上建立索引，<br>查询1仍是采用顺序扫描的方式，查询2则是利用<br>学号索引进行定位，显然大大提高了速度。</p><h3 id="4表的优化"><a href="#4表的优化" class="headerlink" title="4表的优化"></a>4表的优化</h3><p>数据库逻辑设计时，依据范化理论把数据划分<br>成多个相关的表。但随着规范化程度的增加，查询时<br>要求联接的表的数目和复杂性也随之增加，系统复<br>杂的联接运算将影响整体性能。另外对于某些查询<br>要求，使用单个查询语句获得查询结果是较困难的<br>工作，特别是对于大型数据库系统，不容易检查查询<br>结果，要确定查询的正确与否非常困难。针对这些情<br>况，通过引人临时表来简化查询。</p><p>例如，查询某个学生某门课程的成绩。这个查询<br>的使用频率较高，则对其建立一个临时表TEMPSC<br>(学号(SNO )、姓名(SNAME)、课程名(CNAME)、<br>教师(TNAME)、成绩(GRADE))，并将对表S、C及<br>SC的查询结果写人表TEMPSC中。后续查询时直<br>接对表TEMPSC操作即可，简化了查询工作。</p><p>又如查询具有最多女生的系的名称。使用单条<br>查询语句获得查询结果较为困难，则可建立临时表<br>TEMPW(院系(SDEPT)、人数(NUMBER))，先将<br>各院系女生人数的统计结果写人此表，再在表<br>TEMPW中查出人数最多的院系名称。通过分解操<br>作过程，使解决办法得以简化。</p><p>使用临时表时要注意对它的更新操作，以保持<br>与原始表之间数据的一致性。使用完毕后，应对其删<br>除，释放其所占用的空间。</p><h3 id="5结束语"><a href="#5结束语" class="headerlink" title="5结束语"></a>5结束语</h3><p>数据库的优化设计工作对提高系统执行效率起<br>着重要的作用，本文从关系模式的规范化，索引和临<br>时表的建立以及查询优化这几个重要技术的几个方<br>面对数据库优化方案进行探讨。实际运用时，首先在<br>逻辑设计阶段根据范式优化及表优化中的要求设计<br>数据库逻辑结构，对两者的利弊进行权衡，选出折衷<br>的方案，既避免不一致性和数据异常现象，又不影响<br>整体的性能；接着在数据库物理设计阶段根据索引<br>优化中的要求在有关属性或属性的组合上建立索<br>引，以优化数据库物理结构；最后，在数据库查询阶<br>段，采用本文给出，6种优化策略，可大大提高查询<br>效率。总之，数据库设计时，要根据具体情况将上述<br>几个方面的优化策略有机地结合起来，尽可能使系<br>统效率达到最优。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;##数据库优化设计方法初探&lt;/p&gt;
+&lt;p&gt;随着数据库技术的发展，人们越来越依赖于计&lt;br&gt;算机化的业务数据。但由于传统的基于文件的数据&lt;br&gt;存储和检索方法不灵活且难于管理，因而数据库优&lt;br&gt;化设计成为人们关注的问题。如何有效地组织和处&lt;br&gt;理大型数据库的海量数据，使得
+      
+    
+    </summary>
+    
+    
+      <category term="后端" scheme="http://yoursite.com/categories/%E5%90%8E%E7%AB%AF/"/>
+    
+    
+      <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python_variable_scope</title>
+    <link href="http://yoursite.com/2019/11/05/python_variable_scope/"/>
+    <id>http://yoursite.com/2019/11/05/python_variable_scope/</id>
+    <published>2019-11-05T14:36:47.812Z</published>
+    <updated>2019-11-05T14:36:47.812Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Python中的变量范围"><a href="#Python中的变量范围" class="headerlink" title="Python中的变量范围"></a>Python中的变量范围</h2><blockquote><p>关于变量的讨论虽然有很多博客，但是感觉大多数都没有深度，浅尝辄止。推荐一本书《流畅的python》<br>在第八章，对 对象的引用、可变性和垃圾回收有很详细和深度的讲解。我在这里也通过搜索的一些文章和这本书的<br>内容谈谈自己的见解，顺便也做一下笔记。</p></blockquote><p>如果您熟悉Python或任何其他编程语言，<br>你肯定会知道必须先定义变量，然后才能在程序中使用它们。<br>根据定义的方式和位置，必须以不同的方式访问变量。<br>有些变量是全局定义的，有些是局部定义的。<br>这意味着引用程序某个部分中的实体的变量，可能引用程序另一部分中的不同内容。</p><h2 id="到底是什么变量？"><a href="#到底是什么变量？" class="headerlink" title="到底是什么变量？"></a>到底是什么变量？</h2><p>要了解变量的范围，重要的是首先了解什么是变量。本质上，它们是内存中对象的引用或指针。将变量分配给=实例时，<br>就是将变量绑定（或映射）到该实例。<br>可以将多个变量绑定到同一实例。<br>Python使用名称空间跟踪所有这些映射。<br>这些是用于将变量名映射到对象的容器。你可以将它们视为包含name:object映射的字典。<br>可以通过选择分配给它们的名称访问对象。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = 5</span><br><span class="line">b = a</span><br><span class="line">a = 3</span><br></pre></td></tr></table></figure><p>在上面得实例中，a首先绑定到整数5。在这种情况下，a是变量名，整数5是对象<br>然后b设置为a。这实际上意味着b现在绑定到与a相同得整数值5.</p><p>如果随后把a改为4，有过这样经历得同学可能会认为b也会是3</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; a = b = [1,2,3]</span><br><span class="line">&gt;&gt;&gt; a[1] = 0</span><br><span class="line">&gt;&gt;&gt; b</span><br><span class="line">[1, 0, 3]</span><br></pre></td></tr></table></figure><p>值得注意的是 字符串、字节、和数字 等单一型序列是扁平的，它们保存的<br>不是引用，而是在链序的内存中保存数据本身。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;Python中的变量范围&quot;&gt;&lt;a href=&quot;#Python中的变量范围&quot; class=&quot;headerlink&quot; title=&quot;Python中的变量范围&quot;&gt;&lt;/a&gt;Python中的变量范围&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;关于变量的讨论虽然有很多博客，但是
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>golang一些有用的小技巧</title>
@@ -250,11 +300,11 @@
     
     
     
-      <category term="转载" scheme="http://yoursite.com/tags/%E8%BD%AC%E8%BD%BD/"/>
-    
       <category term="python" scheme="http://yoursite.com/tags/python/"/>
     
       <category term="随笔" scheme="http://yoursite.com/tags/%E9%9A%8F%E7%AC%94/"/>
+    
+      <category term="转载" scheme="http://yoursite.com/tags/%E8%BD%AC%E8%BD%BD/"/>
     
   </entry>
   
