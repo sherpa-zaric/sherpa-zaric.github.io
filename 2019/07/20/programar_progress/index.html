@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>程序员的基本尝试--学习篇 | SHERPA-ZARIC | 在神秘的珠穆朗玛峰，有一个为世界各国登山队充当向导与挑夫的族群——夏尔巴人 （SHERPA）</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="转载">
+    <meta name="description" content="程序员的基本常识——学习篇这个系列是《软技能》一书的摘抄整理，详细介绍见该系列首篇文章《程序员的基本常识——职业篇》。我会提取书中的有用信息，重新组织，并补充一些想法。欢迎评论补充相关信息，或是纠正错误观点。 对于心智成长，大部分情况下学校和家庭都在帮倒忙，你通常只能靠阅读来完成自我教育。在编程世界里情况类似。你也许会在学校里学习计算机基础知识，但对于大量的编程语言、框架和工具，你通常都需要自学。">
+<meta name="keywords" content="转载">
+<meta property="og:type" content="article">
+<meta property="og:title" content="程序员的基本尝试--学习篇">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;07&#x2F;20&#x2F;programar_progress&#x2F;index.html">
+<meta property="og:site_name" content="SHERPA-ZARIC">
+<meta property="og:description" content="程序员的基本常识——学习篇这个系列是《软技能》一书的摘抄整理，详细介绍见该系列首篇文章《程序员的基本常识——职业篇》。我会提取书中的有用信息，重新组织，并补充一些想法。欢迎评论补充相关信息，或是纠正错误观点。 对于心智成长，大部分情况下学校和家庭都在帮倒忙，你通常只能靠阅读来完成自我教育。在编程世界里情况类似。你也许会在学校里学习计算机基础知识，但对于大量的编程语言、框架和工具，你通常都需要自学。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-02T13:11:33.714Z">
+<meta name="twitter:card" content="summary">
+    
+        <link rel="alternate" type="application/atom+xml" title="SHERPA-ZARIC" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/images/go.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">ZARIC</h5>
+          <a href="mailto:zarichub@gmail.com" target="_blank" rel="noopener" title="zarichub@gmail.com" class="mail">zarichub@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">程序员的基本尝试--学习篇</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">程序员的基本尝试--学习篇</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-07-20T09:17:18.000Z" itemprop="datePublished" class="page-time">
+  2019-07-20
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#程序员的基本常识——学习篇"><span class="post-toc-number">1.</span> <span class="post-toc-text">程序员的基本常识——学习篇</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-学习怎样学习"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">1. 学习怎样学习</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-十步学习法"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">2. 十步学习法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-6-步：前期调研，收集资料，制定学习计划（这些步骤只做一次）"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">1~6 步：前期调研，收集资料，制定学习计划（这些步骤只做一次）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#7-10-步：学习——实践——掌握——教授（循环往复）"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">7~10 步：学习——实践——掌握——教授（循环往复）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-寻找导师"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">3. 寻找导师</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4-乐为人师"><span class="post-toc-number">1.6.</span> <span class="post-toc-text">4. 乐为人师</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#5-学历"><span class="post-toc-number">1.7.</span> <span class="post-toc-text">5. 学历</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#6-知识短板"><span class="post-toc-number">2.</span> <span class="post-toc-text">6. 知识短板</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-programar_progress"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">程序员的基本尝试--学习篇</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-07-20 17:17:18" datetime="2019-07-20T09:17:18.000Z"  itemprop="datePublished">2019-07-20</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="程序员的基本常识——学习篇"><a href="#程序员的基本常识——学习篇" class="headerlink" title="程序员的基本常识——学习篇"></a>程序员的基本常识——学习篇</h1><p>这个系列是《软技能》一书的摘抄整理，详细介绍见该系列首篇文章《程序员的基本常识——职业篇》。我会提取书中的有用信息，重新组织，并补充一些想法。欢迎评论补充相关信息，或是纠正错误观点。</p>
+<p>对于心智成长，大部分情况下学校和家庭都在帮倒忙，你通常只能靠阅读来完成自我教育。在编程世界里情况类似。你也许会在学校里学习计算机基础知识，但对于大量的编程语言、框架和工具，你通常都需要自学。自学、解决问题和正确提问是程序员必须掌握的几个「元能力」。</p>
+<h2 id="1-学习怎样学习"><a href="#1-学习怎样学习" class="headerlink" title="1. 学习怎样学习"></a>1. 学习怎样学习</h2><ul>
+<li><p>我们几乎都是下意识地倾向于学习自己感兴趣的东西。主动学习是效率更高的方式。</p>
+</li>
+<li><p>学习知识最好的方式就是立即将其用于实践。如果关于某个主题你能获得足够的知识，你就可以发挥自己心灵深处强大的创造力和好奇心。当我们能够在一件事情上尽情发挥的时候，我们的内心就倾向于吸收更多的信息，<br>思考更有意义的问题。这种自然的探索和好奇心能够帮助我们轻而易举的记住更多的信息。</p>
+</li>
+<li><p>一旦你已经实践过，并积累了各式各样的问题，立刻回到书本当中，你会有强烈的冲动去消化吸收其中的内容。</p>
+</li>
+<li><p>然后，你可以把自己学到的新知识重新应用于实践。已解决实践过程中发现的问题为目标，在向着只是前进的道路上重复这个循环。</p>
+</li>
+<li><p>最后，你可以通过写作文章或是教给其他人来加深理解。</p>
+</li>
+<li><p>这个过程可以归纳为「学习——实践——掌握——教授」。<br>以学习某个 Web 框架来说，从头到尾读完一本相关的技术书，并不会让你掌握这个框架。只有在了解基础知识后，自己动手借助书中的知识编写一个 Web 程序，并尝试尽可能多的解决实际问题，才会让你学会这个框架。</p>
+</li>
+</ul>
+<p>以学习某个 Web 框架来说，从头到尾读完一本相关的技术书，并不会让你掌握这个框架。只有在了解基础知识后，自己动手借助书中的知识编写一个 Web 程序，并尝试尽可能多的解决实际问题，才会让你学会这个框架。</p>
+<h2 id="2-十步学习法"><a href="#2-十步学习法" class="headerlink" title="2. 十步学习法"></a>2. 十步学习法</h2><p>十步学习法的基本思想是先对自己要学的东西有个基本的了解。至少了解以下三个要点：</p>
+<ul>
+<li>如何开始：明确你要掌握哪些前导知识，从哪些资料开始最为合适。</li>
+<li>学科范围：确定你的学习方向和大致的学习范围。在开始阶段，你不需要了解每一个细节，只需大致了解学科的轮廓。</li>
+<li>基础知识：了解最基本的知识点是哪些，知道自己学的哪 20% 就能满足 80% 的日常应用。</li>
+</ul>
+<h2 id="1-6-步：前期调研，收集资料，制定学习计划（这些步骤只做一次）"><a href="#1-6-步：前期调研，收集资料，制定学习计划（这些步骤只做一次）" class="headerlink" title="1~6 步：前期调研，收集资料，制定学习计划（这些步骤只做一次）"></a>1~6 步：前期调研，收集资料，制定学习计划（这些步骤只做一次）</h2><ul>
+<li><p>第 1 步：了解全局<br>了解自己将要学习的主题的全局，建立一个基本的概念。</p>
+</li>
+<li><p>第 2 步：确定范围</p>
+</li>
+</ul>
+<p>明确自己到底要学什么，有一个可控的学习范围，而不是试图解决太大的问题。让自己的关注点落脚到更小也更可控的范围，根据你的时间预算，尝试把一个大的主题分解为多个可控的子主题。比如，「学习 HTML」可以进一步细化为「学习 HTML 的基本语法，了解页面基本结构和常用的元素」。</p>
+<ul>
+<li><p>第 3 步：定义目标<br>明确对你来说，学到何种地步，达成何种目标后算是完成学习。好的成功标准应该是具体的、无二义性的。以学习 HTML 为例，「学会用 HTML 编写网页」就是坏的成功标准，而「可以使用 HTML 创建一个内容丰富、语法标准、样式美观并且支持响应式的个人主页」就是一个好的成功标准。</p>
+</li>
+<li><p>第 4 步：寻找资源</p>
+</li>
+</ul>
+<p>对于学习编程来说，你可以在网上找到大量的资源（这里的资源包括书、教程、视频、代码等）。试着在 Google、YouTube、亚马逊、豆瓣读书或其他网站搜索相关关键字，然后根据描述或评论选择资源。尽量选择系统性的教程或书。对于编程语言、框架和工具来说，官方入门教程一般都不会太差。</p>
+<ul>
+<li>第 5 步：创建学习计划</li>
+</ul>
+<p>学习计划就是你的学习路径，通常你可以根据相关主题的技术书的目录来制定学习路径。好的技术书都遵循这样的规律：打好基础，做好铺垫，然后逐个展开每一章的论述。通过对比几本同类型的书籍目录，制定专属于你的学习路径。</p>
+<p>第 6 步：筛选资源</p>
+<p>根据你的学习计划，去掉重复、无用、过时、难度不适宜的资源。只留下 1~2 个品质最高的资源即可。</p>
+<h2 id="7-10-步：学习——实践——掌握——教授（循环往复）"><a href="#7-10-步：学习——实践——掌握——教授（循环往复）" class="headerlink" title="7~10 步：学习——实践——掌握——教授（循环往复）"></a>7~10 步：学习——实践——掌握——教授（循环往复）</h2><ul>
+<li>第 7 步：开始学习，浅尝辄止</li>
+</ul>
+<p>获取刚好足够开始动手实践的基础知识。大多数人在学习过程中通常会犯两类错误：第一类错误是在知之不多的情况下就盲目开始，即行动太早；第二类错误是在行动之前准备过多，即行动太晚。</p>
+<ul>
+<li>第 8 步：动手操作，边玩边学</li>
+</ul>
+<p>通过动手实践验证你在前一步骤学习的知识，并记录下新的疑问。比如，做一个简单的小项目。</p>
+<ul>
+<li>第 9 步：全面掌握，学以致用</li>
+</ul>
+<p>根据你掌握的资源，解决你在实践中记录下的大量问题。同时深入了解各个主题。比如，阅读你要学习的语言、框架的源码。</p>
+<ul>
+<li>第 10 步：乐为人师，融会贯通</li>
+</ul>
+<p>要想确定你确实掌握了某些知识，最好的方式就是把自己学到的知识教给别人。你可以在 Stack Overflow、论坛、IM 群组里回答问题，也可以写文章或录视频。把自己所学教给别人是查漏补缺的好办法，这同时也会增强你的表达能力和理解能力。</p>
+<h2 id="3-寻找导师"><a href="#3-寻找导师" class="headerlink" title="3. 寻找导师"></a>3. 寻找导师</h2><ul>
+<li>在你的软件开发生涯中，拥有一位导师可以说是一笔巨大的财富，因为一位优秀的导师能够让你无需亲身经历现实的重重考验就拥有丰富的经验，从而更高效的掌握某种技术。</li>
+<li>我们通常会犯这样的错误——根据他人的生活来判读其是否具有帮助我们的能力。然而，最好的老师往往深藏不露。你不应该因为某人在自己的生活中成就平平，或者看起来不过如此就对他的印象大打折扣。</li>
+<li>你可以找一位已经成功实现你想要做的事情的人，也可以找一位曾经帮别人实现了你现在想要做到的事情的人。</li>
+<li>导师未必一定得是非常厉害的专家，只比你领先一步的人也值得学习。</li>
+<li>你可以在本地的开发小组或是网上的论坛等地方寻找你的导师，也可以在你的公司或交际圈里寻找，或者通过付费向行家请教。</li>
+<li>优秀的书籍也可以做你的导师。</li>
+<li>在寻找导师之前，你必须要明确两件事，第一是你需要导师帮你解决什么问题；第二是为了能够换取导师的帮助，你能给他提供什么？</li>
+</ul>
+<h2 id="4-乐为人师"><a href="#4-乐为人师" class="headerlink" title="4. 乐为人师"></a>4. 乐为人师</h2><ul>
+<li>成为导师可以让你受益无穷。</li>
+<li>每个人都有教的能力：只要在某些地方快人一步，就能帮助别人。</li>
+<li>有时候你给比人做导师真正要做的就是给予关注。我们在生活中都需要别人的帮助以看到自己看不到的东西，因为当遇到涉及自身的问题和麻烦的时候，我们都会有些目光短浅。</li>
+<li>教授是学习的最佳途径之一。当你担任导师的时候，你会以全新的视角观察和思考，并面对更多有挑战的问题。在探究答案的过程中，你会愈加深入思考，发现自己的漏洞，甚至完全改变最初的想法。</li>
+<li>一旦我们试着向别人解释某件事情的运作原理或背后的原因的时候，我们在认知上的漏洞就会暴露出来。</li>
+<li>最好的教学方式就是以谦虚的视角来观察问题，以权威的口吻去诠释问题。你要明白，你教的目的是为了帮助别人，而不是为了证明自己的优越性或者寻求认可。</li>
+<li>除了写博客，录视频和演讲也是很好的教学方式。演讲时要心态谦卑，信心满满（而不是傲慢自大）。</li>
+</ul>
+<h2 id="5-学历"><a href="#5-学历" class="headerlink" title="5. 学历"></a>5. 学历</h2><ul>
+<li>拥有（好的）学历并不是成功所必须的，但它限制了可以提供给你的职位数量，并且某种程度上也限制了你的晋升。</li>
+<li>学历教育可以提供一个相对完善的计算机基础教育。当然，这些知识你也可以通过自学获得，不过这需要花费大量的时间。</li>
+<li>如果你没有（好的）学历，那么就通过作品来证明你的能力。比如，你可以写博客，独立开发一个程序，在 GitHub 上创建或参与开源项目，或是在 Stack Overflow 回答问题。</li>
+<li>弥补措施是，你可以通过自考获得一个学位，大概需要花费两年的业余时间外加两千块的投入。</li>
+</ul>
+<h1 id="6-知识短板"><a href="#6-知识短板" class="headerlink" title="6. 知识短板"></a>6. 知识短板</h1><ul>
+<li>专注于自身强项，这没什么不妥，但有时候，如果弱点得不到解决，通常会成为你的职业或生活的桎梏。</li>
+<li>准确识别短板的最佳方式之一就是看看自己在哪些工作上花费了大量的时间，或者一直进行重复性劳动。比如，学习操作系统或各类软件的快捷键就可以节省大量时间；编写宏或自动化脚本来简化各种软件或系统中的重复操作。</li>
+<li>维护一份清单，列出自己需要去研究或者不清楚的事物。</li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+
+        
+        文章链接:<a href="/2019/07/20/programar_progress/" target="_blank" rel="external">http://yoursite.com/2019/07/20/programar_progress/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="http://yoursite.com">
+            <img src="/images/go.jpg" alt="ZARIC">
+            ZARIC
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag">转载</a></li></ul>
+
+
+            
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2019/08/01/tornado-login-required/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">实现tornado login_required()</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/07/20/shadowsockts%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">shadowsocks源码解读</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        <span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>ZARIC &copy; 2015 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" target="_blank" rel="noopener" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: false, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'ZaricHub loading...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'ZaricHub';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
