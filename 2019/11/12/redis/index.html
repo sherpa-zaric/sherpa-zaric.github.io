@@ -14,25 +14,24 @@
     
     
     
-    <title>flask应用上下文和请求上下文 | SHERPA-ZARIC | 在神秘的珠穆朗玛峰，有一个为世界各国登山队充当向导与挑夫的族群——夏尔巴人 （SHERPA）</title>
+    <title>redis知识点总结 | SHERPA-ZARIC | 在神秘的珠穆朗玛峰，有一个为世界各国登山队充当向导与挑夫的族群——夏尔巴人 （SHERPA）</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="python,flask,随笔">
-    <meta name="description" content="flask应用上下文和请求上下文虽然现在已经是python3的时代，一些开发库已经不支持python2并且asyncio也越来越多的被应用。但是个人感觉如果要解决高并发问题，使用asyncio并不是很好的实践。">
-<meta name="keywords" content="python,flask,随笔">
+    <meta name="keywords" content="">
+    <meta name="description" content="探讨问题点：  缓存的使用场景 redis使用 缓存使用中的坑  为什么要使用缓存？使用场景redis&amp;amp; memcached  大幅度缓解关系型数据库并发访问的压力：热点数据 减少相应时间：内存IO速度比磁盘快。 提升吞吐量：redis等内存数据库单机就可以支持很大的并发。   redis常用数据类型，使用方式redis常用数据类型：  string   list 双向链表 hash表，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="flask应用上下文和请求上下文">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;09&#x2F;23&#x2F;flask%E5%BA%94%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87&amp;%E8%AF%B7%E6%B1%82%E4%B8%8A%E4%B8%8B%E6%96%87&#x2F;index.html">
+<meta property="og:title" content="redis知识点总结">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;12&#x2F;redis&#x2F;index.html">
 <meta property="og:site_name" content="SHERPA-ZARIC">
-<meta property="og:description" content="flask应用上下文和请求上下文虽然现在已经是python3的时代，一些开发库已经不支持python2并且asyncio也越来越多的被应用。但是个人感觉如果要解决高并发问题，使用asyncio并不是很好的实践。">
+<meta property="og:description" content="探讨问题点：  缓存的使用场景 redis使用 缓存使用中的坑  为什么要使用缓存？使用场景redis&amp;amp; memcached  大幅度缓解关系型数据库并发访问的压力：热点数据 减少相应时间：内存IO速度比磁盘快。 提升吞吐量：redis等内存数据库单机就可以支持很大的并发。   redis常用数据类型，使用方式redis常用数据类型：  string   list 双向链表 hash表，">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;flask.png">
-<meta property="og:updated_time" content="2019-11-04T17:15:57.597Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;io%E6%97%B6%E9%97%B4%E5%AF%B9%E6%AF%94.jpg">
+<meta property="og:updated_time" content="2019-11-12T14:48:19.662Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;flask.png">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;io%E6%97%B6%E9%97%B4%E5%AF%B9%E6%AF%94.jpg">
     
         <link rel="alternate" type="application/atom+xml" title="SHERPA-ZARIC" href="/atom.xml">
     
@@ -120,7 +119,7 @@
         <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">flask应用上下文和请求上下文</div>
+        <div class="flex-col header-title ellipsis">redis知识点总结</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -138,15 +137,13 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">flask应用上下文和请求上下文</h1>
+        <h1 class="title">redis知识点总结</h1>
         <h5 class="subtitle">
             
-                <time datetime="2019-09-23T13:47:23.000Z" itemprop="datePublished" class="page-time">
-  2019-09-23
+                <time datetime="2019-11-12T14:24:38.000Z" itemprop="datePublished" class="page-time">
+  2019-11-12
 </time>
 
-
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/%E5%90%8E%E7%AB%AF/">后端</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/%E5%90%8E%E7%AB%AF/python/">python</a></li></ul></li></ul>
 
             
         </h5>
@@ -163,22 +160,20 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#flask应用上下文和请求上下文"><span class="post-toc-number">1.</span> <span class="post-toc-text">flask应用上下文和请求上下文</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#为什么要使用缓存？使用场景"><span class="post-toc-number">1.</span> <span class="post-toc-text">为什么要使用缓存？使用场景</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#redis常用数据类型，使用方式"><span class="post-toc-number">2.</span> <span class="post-toc-text">redis常用数据类型，使用方式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#缓存使用问题：数据一致性；缓存穿透、击穿、雪崩问题"><span class="post-toc-number">3.</span> <span class="post-toc-text">缓存使用问题：数据一致性；缓存穿透、击穿、雪崩问题</span></a></li></ol>
         </nav>
     </aside>
 
 
-<article id="post-flask应用上下文&amp;请求上下文"
+<article id="post-redis"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">flask应用上下文和请求上下文</h1>
+        <h1 class="post-card-title">redis知识点总结</h1>
         <div class="post-meta">
-            <time class="post-time" title="2019-09-23 21:47:23" datetime="2019-09-23T13:47:23.000Z"  itemprop="datePublished">2019-09-23</time>
+            <time class="post-time" title="2019-11-12 22:24:38" datetime="2019-11-12T14:24:38.000Z"  itemprop="datePublished">2019-11-12</time>
 
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/%E5%90%8E%E7%AB%AF/">后端</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/%E5%90%8E%E7%AB%AF/python/">python</a></li></ul></li></ul>
-
 
 
             
@@ -189,19 +184,41 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="flask应用上下文和请求上下文"><a href="#flask应用上下文和请求上下文" class="headerlink" title="flask应用上下文和请求上下文"></a>flask应用上下文和请求上下文</h2><p>虽然现在已经是python3的时代，一些开发库已经不支持python2并且asyncio也越来越多的被应用。<br>但是个人感觉如果要解决高并发问题，使用asyncio并不是很好的实践。</p>
-<a id="more"></a>
-<p>因为协程之间并不是简单的调用切换，还涉及到一些协程间通信。<br>使用python还是以‘顺序’编程为主，如果公司对高并发真的是有急迫的需求，更好的选择应该是<code>golang</code></p>
-<p>与<code>flask</code>对应的异步web框架是<code>sanic</code>。两者的编程风格很相似，包括核心app的构建方法，路由等。<br><code>sanic</code>是基于asyncio的事件回调机制来完成的，与tornado（老版的tornado是基于yield实现的类似于协程的切换）相比，性能及可读性更高一些。</p>
-<p>我个人实际开发中对并发并没有很高的要求，所以应用最多的还是flask，原因很简单-需求驱动。</p>
-<p>简单整理了flask的应用上下文和请求上下文的处理过程。</p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="/images/flask.png" alt="" title="">
-                </div>
-                <div class="image-caption"></div>
-            </figure>
+            <p>探讨问题点：</p>
+<blockquote>
+<p>缓存的使用场景</p>
+<p>redis使用</p>
+<p>缓存使用中的坑</p>
+</blockquote>
+<h2 id="为什么要使用缓存？使用场景"><a href="#为什么要使用缓存？使用场景" class="headerlink" title="为什么要使用缓存？使用场景"></a>为什么要使用缓存？使用场景</h2><p>redis&amp; memcached</p>
+<ul>
+<li>大幅度缓解关系型数据库并发访问的压力：热点数据</li>
+<li>减少相应时间：内存IO速度比磁盘快。</li>
+<li>提升吞吐量：redis等内存数据库单机就可以支持很大的并发。</li>
+</ul>
+<p><img src="/images/io%E6%97%B6%E9%97%B4%E5%AF%B9%E6%AF%94.jpg" alt=""></p>
+<h2 id="redis常用数据类型，使用方式"><a href="#redis常用数据类型，使用方式" class="headerlink" title="redis常用数据类型，使用方式"></a>redis常用数据类型，使用方式</h2><p>redis常用数据类型：</p>
+<ul>
+<li>string  </li>
+<li>list 双向链表</li>
+<li>hash表， hset key value</li>
+<li>set 集合，用户关注着</li>
+<li>sorted set 有序集合，实时信息排行榜</li>
+</ul>
+<p>redis内置实现方式：</p>
+<p>底层使用c语言实现。图书参考 redis设计与实现</p>
+<ul>
+<li><p>string 整数或者sds</p>
+</li>
+<li><p>list ziplist 或者double linked list<br>  ziplist使用连续的内存块存储数据，节省内存</p>
+</li>
+<li><p>set  intset 或者hashtable</p>
+</li>
+<li><p>sortedset skiplist 跳跃表</p>
+</li>
+</ul>
+<p>跳跃表是什么？为什么不适用平衡树？</p>
+<h2 id="缓存使用问题：数据一致性；缓存穿透、击穿、雪崩问题"><a href="#缓存使用问题：数据一致性；缓存穿透、击穿、雪崩问题" class="headerlink" title="缓存使用问题：数据一致性；缓存穿透、击穿、雪崩问题"></a>缓存使用问题：数据一致性；缓存穿透、击穿、雪崩问题</h2>
         </div>
 
         <blockquote class="post-copyright">
@@ -210,7 +227,7 @@
         
 
         
-        文章链接:<a href="/2019/09/23/flask%E5%BA%94%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87&amp;%E8%AF%B7%E6%B1%82%E4%B8%8A%E4%B8%8B%E6%96%87/" target="_blank" rel="external">http://yoursite.com/2019/09/23/flask%E5%BA%94%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87&amp;%E8%AF%B7%E6%B1%82%E4%B8%8A%E4%B8%8B%E6%96%87/</a>
+        文章链接:<a href="/2019/11/12/redis/" target="_blank" rel="external">http://yoursite.com/2019/11/12/redis/</a>
         
     </div>
     
@@ -227,8 +244,6 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/flask/" rel="tag">flask</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
-
 
             
 
@@ -240,18 +255,18 @@
 <nav class="post-nav flex-row flex-justify-between">
   
     <div class="waves-block waves-effect prev">
-      <a href="/2019/10/03/python-cache/" id="post-prev" class="post-nav-link">
+      <a href="/2019/12/02/what_is_nofollow/" id="post-prev" class="post-nav-link">
         <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">python-cache</h4>
+        <h4 class="title">what_is_nofollow</h4>
       </a>
     </div>
   
 
   
     <div class="waves-block waves-effect next">
-      <a href="/2019/09/23/flask-is-not-production-server/" id="post-next" class="post-nav-link">
+      <a href="/2019/11/06/python_variable_scope/" id="post-next" class="post-nav-link">
         <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">flask.run()不是你的服务器！</h4>
+        <h4 class="title">python_variable_scope</h4>
       </a>
     </div>
   
