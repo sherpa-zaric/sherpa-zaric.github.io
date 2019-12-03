@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-12-03T17:36:51.790Z</updated>
+  <updated>2019-12-03T17:38:28.029Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://yoursite.com/2019/12/03/python-%E4%BD%8D%E8%BF%90%E7%AE%97-md/"/>
     <id>http://yoursite.com/2019/12/03/python-位运算-md/</id>
     <published>2019-12-03T13:17:19.000Z</published>
-    <updated>2019-12-03T17:36:51.790Z</updated>
+    <updated>2019-12-03T17:38:28.029Z</updated>
     
     <content type="html"><![CDATA[<h1 id="项目中用到的一些小技巧的分享"><a href="#项目中用到的一些小技巧的分享" class="headerlink" title="项目中用到的一些小技巧的分享"></a>项目中用到的一些小技巧的分享</h1><p>之前的web项目中用到了用户权限分配的一些问题。为了更好及更美观的设计表结构。利用到了python位运算的一些知识，在此处做个记录。</p><p>先来复习一下python位运算<br>变量 a 为 60，b 为 13</p><table><thead><tr><th>运算符</th><th>描述</th><th>实例</th></tr></thead><tbody><tr><td>&amp;</td><td>按位与运算符：参与运算的两个值,如果两个相应位都为1,则该位的结果为1,否则为0</td><td>(a &verbar; b) 输出结果 12 ，二进制解释： 0000 1100</td></tr><tr><td>&verbar;</td><td>按位或运算符：只要对应的二个二进位有一个为1时，结果位就为1。</td><td>(a &verbar; b) 输出结果 61 ，二进制解释： 0011 1101</td></tr><tr><td>^</td><td>按位异或运算符：当两对应的二进位相异时，结果为1</td><td>(a ^ b) 输出结果 49 ，二进制解释： 0011 0001</td></tr><tr><td>~</td><td>按位取反运算符：对数据的每个二进制位取反,即把1变为0,把0变为1 。~x 类似于 -x-1</td><td>(~a ) 输出结果 -61 ，二进制解释： 1100 0011，在一个有符号二进制数的补码形式。</td></tr><tr><td>&lt;&lt;</td><td>左移动运算符：运算数的各二进位全部左移若干位，由 &lt;&lt; 右边的数字指定了移动的位数，高位丢弃，低位补0。</td><td>a &lt;&lt; 2 输出结果 240 ，二进制解释： 1111 0000</td></tr><tr><td>&gt;&gt;</td><td>右移动运算符：把”&gt;&gt;”左边的运算数的各二进位全部右移若干位，&gt;&gt; 右边的数字指定了移动的位数</td><td>a &gt;&gt; 2 输出结果 15 ，二进制解释： 0000 1111</td></tr></tbody></table><h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>要对用户分为四个等级</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- level1 </span><br><span class="line">- level2</span><br><span class="line">- level3</span><br><span class="line">- level4</span><br></pre></td></tr></table></figure><p>需求是下一个等级的用户要包含上一个等级用户的所有权限，并且又包含新的权限。</p><p>于是就想到了利用位的<code>与</code> 运算来实现这个功能<br>原理是这样的：</p><p>10 进制转二进制数字：<br>（前面的0可以根据权限多少自由扩展）</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1 -- &gt; 0b000001    权限操作1   </span><br><span class="line">2 -- &gt; 0b000010    权限操作2</span><br><span class="line">4 -- &gt; 0b000100    权限操作3</span><br><span class="line">8 -- &gt; 0b001000    权限操作4</span><br><span class="line">16-- &gt; 0b010000    权限操作5</span><br><span class="line">....</span><br></pre></td></tr></table></figure><p>观察1，2，4,8 这三个二进制数字。<code>001 , 010 , 100</code><br>如果我们对1，2，4，8，16各自进行按位与操作。 2&amp;1 –&gt;  <code>0b000000</code> 4 |2 –&gt; <code>0b00000</code><br>即每种操作符都针对的是一种状态，有点类似晶体管的01状态。<br>如果我们希望level1的用户拥有 <code>权限操作1</code> 我们就定义它的权限值为1 。level2的用户<br>我们希望他有 <code>权限操作 1 和2</code> 我们把他的权限值定位 <code>1 + 2 = 3 --&gt; 0b000011</code>,以此类推。</p><p>对用户有无权限的校验可以是这样:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">def has_permission(user,perm):</span><br><span class="line">    return user.perm &amp; perm == perm</span><br></pre></td></tr></table></figure><p>例如：我们对拥有 操作权限1 和 2 （权限值3）的用户校验其是否有操作权限2</p><p><code>result = has_permission(user,2)</code>即 3 &amp; 2 –&gt; 也就是 <code>000011 &amp; 000010</code> –&gt;<code>000010</code>==2;表名该用户拥有操作权限2；</p><p>使用这种权限分配的灵感来源于<code>Miguel Grinberg</code>写的《Flask Web 开发–基于python的web应用开发实战》的内容。<br>动手敲了一遍书中的代码，所以印象比较深刻。项目中碰到类似的问题直接就想到了这种权限定义。感谢作者的智慧。   </p>]]></content>
     
@@ -35,6 +35,10 @@
     </summary>
     
     
+    
+      <category term="python" scheme="http://yoursite.com/tags/python/"/>
+    
+      <category term="后端" scheme="http://yoursite.com/tags/%E5%90%8E%E7%AB%AF/"/>
     
   </entry>
   
