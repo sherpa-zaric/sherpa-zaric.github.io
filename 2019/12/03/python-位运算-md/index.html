@@ -14,22 +14,21 @@
     
     
     
-    <title>shadowsocks源码解读 | SHERPA-ZARIC | 在神秘的珠穆朗玛峰，有一个为世界各国登山队充当向导与挑夫的族群——夏尔巴人 （SHERPA）</title>
+    <title>python位运算 | SHERPA-ZARIC | 在神秘的珠穆朗玛峰，有一个为世界各国登山队充当向导与挑夫的族群——夏尔巴人 （SHERPA）</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="转载,python,随笔">
-    <meta name="description" content="shadowsocks源码解读经常使用shadowsocks科学上网，但是一直没有时间去看一看人家怎么写的。先记录一下一篇写的很详细的博客，这篇就当书签用啦。Shadowsocks 源码分析——协议与结构">
-<meta name="keywords" content="转载,python,随笔">
+    <meta name="keywords" content="">
+    <meta name="description" content="项目中用到的一些小技巧的分享之前的web项目中用到了用户权限分配的一些问题。为了更好及更美观的设计表结构。利用到了python位运算的一些知识，在此处做个记录。 先来复习一下python位运算变量 a 为 60，b 为 13    运算符 描述 实例    &amp;amp; 按位与运算符：参与运算的两个值,如果两个相应位都为1,则该位的结果为1,否则为0 (a &amp;verbar; b) 输出结果 12 ，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="shadowsocks源码解读">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;07&#x2F;20&#x2F;shadowsockts%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB&#x2F;index.html">
+<meta property="og:title" content="python位运算">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;03&#x2F;python-%E4%BD%8D%E8%BF%90%E7%AE%97-md&#x2F;index.html">
 <meta property="og:site_name" content="SHERPA-ZARIC">
-<meta property="og:description" content="shadowsocks源码解读经常使用shadowsocks科学上网，但是一直没有时间去看一看人家怎么写的。先记录一下一篇写的很详细的博客，这篇就当书签用啦。Shadowsocks 源码分析——协议与结构">
+<meta property="og:description" content="项目中用到的一些小技巧的分享之前的web项目中用到了用户权限分配的一些问题。为了更好及更美观的设计表结构。利用到了python位运算的一些知识，在此处做个记录。 先来复习一下python位运算变量 a 为 60，b 为 13    运算符 描述 实例    &amp;amp; 按位与运算符：参与运算的两个值,如果两个相应位都为1,则该位的结果为1,否则为0 (a &amp;verbar; b) 输出结果 12 ，">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-04T17:15:57.572Z">
+<meta property="og:updated_time" content="2019-12-03T17:36:51.790Z">
 <meta name="twitter:card" content="summary">
     
         <link rel="alternate" type="application/atom+xml" title="SHERPA-ZARIC" href="/atom.xml">
@@ -118,7 +117,7 @@
         <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">shadowsocks源码解读</div>
+        <div class="flex-col header-title ellipsis">python位运算</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -136,11 +135,11 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">shadowsocks源码解读</h1>
+        <h1 class="title">python位运算</h1>
         <h5 class="subtitle">
             
-                <time datetime="2019-07-20T04:00:40.000Z" itemprop="datePublished" class="page-time">
-  2019-07-20
+                <time datetime="2019-12-03T13:17:19.000Z" itemprop="datePublished" class="page-time">
+  2019-12-03
 </time>
 
 
@@ -159,18 +158,18 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#shadowsocks源码解读"><span class="post-toc-number">1.</span> <span class="post-toc-text">shadowsocks源码解读</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#项目中用到的一些小技巧的分享"><span class="post-toc-number">1.</span> <span class="post-toc-text">项目中用到的一些小技巧的分享</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#背景介绍"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">背景介绍</span></a></li></ol></li></ol>
         </nav>
     </aside>
 
 
-<article id="post-shadowsockts源码解读"
+<article id="post-python-位运算-md"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">shadowsocks源码解读</h1>
+        <h1 class="post-card-title">python位运算</h1>
         <div class="post-meta">
-            <time class="post-time" title="2019-07-20 12:00:40" datetime="2019-07-20T04:00:40.000Z"  itemprop="datePublished">2019-07-20</time>
+            <time class="post-time" title="2019-12-03 21:17:19" datetime="2019-12-03T13:17:19.000Z"  itemprop="datePublished">2019-12-03</time>
 
             
 
@@ -183,7 +182,59 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="shadowsocks源码解读"><a href="#shadowsocks源码解读" class="headerlink" title="shadowsocks源码解读"></a>shadowsocks源码解读</h2><p>经常使用shadowsocks科学上网，但是一直没有时间去看一看人家怎么写的。<br>先记录一下一篇写的很详细的博客，这篇就当书签用啦。<br><a href="https://loggerhead.me/posts/shadowsocks-yuan-ma-fen-xi-xie-yi-yu-jie-gou.html" target="_blank" rel="noopener">Shadowsocks 源码分析——协议与结构</a></p>
+            <h1 id="项目中用到的一些小技巧的分享"><a href="#项目中用到的一些小技巧的分享" class="headerlink" title="项目中用到的一些小技巧的分享"></a>项目中用到的一些小技巧的分享</h1><p>之前的web项目中用到了用户权限分配的一些问题。为了更好及更美观的设计表结构。利用到了python位运算的一些知识，在此处做个记录。</p>
+<p>先来复习一下python位运算<br>变量 a 为 60，b 为 13</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&amp;</td>
+<td>按位与运算符：参与运算的两个值,如果两个相应位都为1,则该位的结果为1,否则为0</td>
+<td>(a &verbar; b) 输出结果 12 ，二进制解释： 0000 1100</td>
+</tr>
+<tr>
+<td>&verbar;</td>
+<td>按位或运算符：只要对应的二个二进位有一个为1时，结果位就为1。</td>
+<td>(a &verbar; b) 输出结果 61 ，二进制解释： 0011 1101</td>
+</tr>
+<tr>
+<td>^</td>
+<td>按位异或运算符：当两对应的二进位相异时，结果为1</td>
+<td>(a ^ b) 输出结果 49 ，二进制解释： 0011 0001</td>
+</tr>
+<tr>
+<td>~</td>
+<td>按位取反运算符：对数据的每个二进制位取反,即把1变为0,把0变为1 。~x 类似于 -x-1</td>
+<td>(~a ) 输出结果 -61 ，二进制解释： 1100 0011，在一个有符号二进制数的补码形式。</td>
+</tr>
+<tr>
+<td>&lt;&lt;</td>
+<td>左移动运算符：运算数的各二进位全部左移若干位，由 &lt;&lt; 右边的数字指定了移动的位数，高位丢弃，低位补0。</td>
+<td>a &lt;&lt; 2 输出结果 240 ，二进制解释： 1111 0000</td>
+</tr>
+<tr>
+<td>&gt;&gt;</td>
+<td>右移动运算符：把”&gt;&gt;”左边的运算数的各二进位全部右移若干位，&gt;&gt; 右边的数字指定了移动的位数</td>
+<td>a &gt;&gt; 2 输出结果 15 ，二进制解释： 0000 1111</td>
+</tr>
+</tbody></table>
+<h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>要对用户分为四个等级</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- level1 </span><br><span class="line">- level2</span><br><span class="line">- level3</span><br><span class="line">- level4</span><br></pre></td></tr></table></figure>
+<p>需求是下一个等级的用户要包含上一个等级用户的所有权限，并且又包含新的权限。</p>
+<p>于是就想到了利用位的<code>与</code> 运算来实现这个功能<br>原理是这样的：</p>
+<p>10 进制转二进制数字：<br>（前面的0可以根据权限多少自由扩展）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1 -- &gt; 0b000001    权限操作1   </span><br><span class="line">2 -- &gt; 0b000010    权限操作2</span><br><span class="line">4 -- &gt; 0b000100    权限操作3</span><br><span class="line">8 -- &gt; 0b001000    权限操作4</span><br><span class="line">16-- &gt; 0b010000    权限操作5</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+<p>观察1，2，4,8 这三个二进制数字。<code>001 , 010 , 100</code><br>如果我们对1，2，4，8，16各自进行按位与操作。 2&amp;1 –&gt;  <code>0b000000</code> 4 |2 –&gt; <code>0b00000</code><br>即每种操作符都针对的是一种状态，有点类似晶体管的01状态。<br>如果我们希望level1的用户拥有 <code>权限操作1</code> 我们就定义它的权限值为1 。level2的用户<br>我们希望他有 <code>权限操作 1 和2</code> 我们把他的权限值定位 <code>1 + 2 = 3 --&gt; 0b000011</code>,以此类推。</p>
+<p>对用户有无权限的校验可以是这样:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">def has_permission(user,perm):</span><br><span class="line">    return user.perm &amp; perm == perm</span><br></pre></td></tr></table></figure>
+<p>例如：我们对拥有 操作权限1 和 2 （权限值3）的用户校验其是否有操作权限2</p>
+<p><code>result = has_permission(user,2)</code>即 3 &amp; 2 –&gt; 也就是 <code>000011 &amp; 000010</code> –&gt;<code>000010</code>==2;表名该用户拥有操作权限2；</p>
+<p>使用这种权限分配的灵感来源于<code>Miguel Grinberg</code>写的《Flask Web 开发–基于python的web应用开发实战》的内容。<br>动手敲了一遍书中的代码，所以印象比较深刻。项目中碰到类似的问题直接就想到了这种权限定义。感谢作者的智慧。   </p>
 
         </div>
 
@@ -193,7 +244,7 @@
         
 
         
-        文章链接:<a href="/2019/07/20/shadowsockts%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" target="_blank" rel="external">http://yoursite.com/2019/07/20/shadowsockts%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/</a>
+        文章链接:<a href="/2019/12/03/python-%E4%BD%8D%E8%BF%90%E7%AE%97-md/" target="_blank" rel="external">http://yoursite.com/2019/12/03/python-%E4%BD%8D%E8%BF%90%E7%AE%97-md/</a>
         
     </div>
     
@@ -210,8 +261,6 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag">转载</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
-
 
             
 
@@ -220,21 +269,14 @@
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between">
-  
-    <div class="waves-block waves-effect prev">
-      <a href="/2019/07/20/programar_progress/" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">程序员的基本尝试--学习篇</h4>
-      </a>
-    </div>
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
   
 
   
     <div class="waves-block waves-effect next">
-      <a href="/2019/06/17/queue-Queue%20and%20multiprocessing-Queue/" id="post-next" class="post-nav-link">
+      <a href="/2019/12/02/sqlalchemy_event/" id="post-next" class="post-nav-link">
         <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">queue.Queue 和mutiprocessing.Queue</h4>
+        <h4 class="title">sqlalchemy事件</h4>
       </a>
     </div>
   
